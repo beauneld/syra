@@ -1,16 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { X, Upload, Loader2 } from 'lucide-react';
-import Modal from './Modal';
 import { Partner } from '../services/partnersService';
 
 interface PartnerFormModalProps {
-  isOpen: boolean;
   onClose: () => void;
   onSave: (formData: { name: string; website_url: string; logo_file: File | null }) => Promise<void>;
   partner?: Partner | null;
 }
 
-export default function PartnerFormModal({ isOpen, onClose, onSave, partner }: PartnerFormModalProps) {
+export default function PartnerFormModal({ onClose, onSave, partner }: PartnerFormModalProps) {
   const [name, setName] = useState('');
   const [websiteUrl, setWebsiteUrl] = useState('');
   const [logoFile, setLogoFile] = useState<File | null>(null);
@@ -20,19 +18,19 @@ export default function PartnerFormModal({ isOpen, onClose, onSave, partner }: P
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isOpen && partner) {
+    if (partner) {
       setName(partner.name);
       setWebsiteUrl(partner.website_url);
       setLogoPreview(partner.logo_url);
       setLogoFile(null);
-    } else if (isOpen) {
+    } else {
       setName('');
       setWebsiteUrl('');
       setLogoFile(null);
       setLogoPreview('');
     }
     setError('');
-  }, [isOpen, partner]);
+  }, [partner]);
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -93,103 +91,116 @@ export default function PartnerFormModal({ isOpen, onClose, onSave, partner }: P
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={partner ? 'Modifier le partenaire' : 'Ajouter un nouveau partenaire'}
-      maxWidth="600px"
-    >
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl text-sm">
-            {error}
+    <>
+      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[109]" onClick={onClose} />
+      <div className="fixed inset-0 flex items-center justify-center z-[110] p-4 overflow-y-auto pointer-events-none">
+        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto my-4 pointer-events-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="p-6 border-b border-gray-200/30 flex items-center justify-between sticky top-0 bg-white rounded-t-3xl z-10">
+            <h2 className="text-xl font-light text-gray-900">{partner ? 'Modifier le partenaire' : 'Ajouter un nouveau partenaire'}</h2>
+            <button
+              onClick={onClose}
+              aria-label="Fermer la fenêtre"
+              className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all"
+            >
+              <X className="w-4 h-4 text-gray-600" />
+            </button>
           </div>
-        )}
 
-        <div>
-          <label className="block text-sm font-light text-gray-700 mb-2">
-            Nom du partenaire <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-            placeholder="Ex: Allianz"
-            disabled={isSubmitting}
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-light text-gray-700 mb-2">
-            URL du site web <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="url"
-            value={websiteUrl}
-            onChange={(e) => setWebsiteUrl(e.target.value)}
-            className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-            placeholder="https://www.exemple.fr"
-            disabled={isSubmitting}
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-light text-gray-700 mb-2">
-            Logo {!partner && <span className="text-red-500">*</span>}
-          </label>
-          <div className="space-y-3">
-            {logoPreview && (
-              <div className="relative w-32 h-32 mx-auto bg-white border-2 border-gray-200 rounded-2xl p-4 flex items-center justify-center">
-                <img
-                  src={logoPreview}
-                  alt="Aperçu du logo"
-                  className="max-w-full max-h-full object-contain"
-                />
+          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl text-sm">
+                {error}
               </div>
             )}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleLogoChange}
-              className="hidden"
-              disabled={isSubmitting}
-            />
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl text-sm font-light hover:from-blue-600 hover:to-blue-700 flex items-center justify-center gap-2 shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={isSubmitting}
-            >
-              <Upload className="w-4 h-4" />
-              {logoPreview ? 'Changer le logo' : 'Choisir un logo'}
-            </button>
-            <p className="text-xs text-gray-500 font-light text-center">
-              Formats acceptés : PNG, JPG, SVG (max 5 MB)
-            </p>
-          </div>
-        </div>
 
-        <div className="flex items-center justify-end gap-3 pt-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl text-sm font-light transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isSubmitting}
-          >
-            Annuler
-          </button>
-          <button
-            type="submit"
-            className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl text-sm font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-            disabled={isSubmitting}
-          >
-            {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
-            {isSubmitting ? 'Enregistrement...' : (partner ? 'Enregistrer' : 'Ajouter')}
-          </button>
+            <div>
+              <label className="block text-sm font-light text-gray-700 mb-2">
+                Nom du partenaire <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                placeholder="Ex: Allianz"
+                disabled={isSubmitting}
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-light text-gray-700 mb-2">
+                URL du site web <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="url"
+                value={websiteUrl}
+                onChange={(e) => setWebsiteUrl(e.target.value)}
+                className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                placeholder="https://www.exemple.fr"
+                disabled={isSubmitting}
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-light text-gray-700 mb-2">
+                Logo {!partner && <span className="text-red-500">*</span>}
+              </label>
+              <div className="space-y-3">
+                {logoPreview && (
+                  <div className="relative w-32 h-32 mx-auto bg-white border-2 border-gray-200 rounded-2xl p-4 flex items-center justify-center">
+                    <img
+                      src={logoPreview}
+                      alt="Aperçu du logo"
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  </div>
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleLogoChange}
+                  className="hidden"
+                  disabled={isSubmitting}
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl text-sm font-light hover:from-blue-600 hover:to-blue-700 flex items-center justify-center gap-2 shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isSubmitting}
+                >
+                  <Upload className="w-4 h-4" />
+                  {logoPreview ? 'Changer le logo' : 'Choisir un logo'}
+                </button>
+                <p className="text-xs text-gray-500 font-light text-center">
+                  Formats acceptés : PNG, JPG, SVG (max 5 MB)
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 px-6 py-2.5 bg-white/80 border border-gray-200/50 text-gray-700 rounded-full text-sm font-light hover:bg-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isSubmitting}
+              >
+                Annuler
+              </button>
+              <button
+                type="submit"
+                className="flex-1 px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                disabled={isSubmitting}
+              >
+                {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                {isSubmitting ? 'Enregistrement...' : (partner ? 'Enregistrer' : 'Ajouter')}
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
-    </Modal>
+      </div>
+    </>
   );
 }

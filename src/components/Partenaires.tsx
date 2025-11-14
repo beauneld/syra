@@ -8,6 +8,16 @@ interface PartenairesProps {
   notificationCount: number;
 }
 
+const defaultPartners = [
+  { id: 'default-1', name: 'Entoria', logo_url: '/entorialogo.svg', website_url: 'https://www.entoria.fr/', created_at: '', updated_at: '' },
+  { id: 'default-2', name: 'Allianz', logo_url: '/entorialogo.svg', website_url: 'https://www.allianz.fr/', created_at: '', updated_at: '' },
+  { id: 'default-3', name: 'AXA', logo_url: '/entorialogo.svg', website_url: 'https://www.axa.fr/', created_at: '', updated_at: '' },
+  { id: 'default-4', name: 'Generali', logo_url: '/entorialogo.svg', website_url: 'https://www.generali.fr/', created_at: '', updated_at: '' },
+  { id: 'default-5', name: 'CNP Assurances', logo_url: '/entorialogo.svg', website_url: 'https://www.cnp.fr/', created_at: '', updated_at: '' },
+  { id: 'default-6', name: 'Groupama', logo_url: '/entorialogo.svg', website_url: 'https://www.groupama.fr/', created_at: '', updated_at: '' },
+  { id: 'default-7', name: 'MAIF', logo_url: '/entorialogo.svg', website_url: 'https://www.maif.fr/', created_at: '', updated_at: '' },
+  { id: 'default-8', name: 'MACIF', logo_url: '/entorialogo.svg', website_url: 'https://www.macif.fr/', created_at: '', updated_at: '' },
+];
 
 export default function Partenaires({ onNotificationClick, notificationCount }: PartenairesProps) {
   const [partners, setPartners] = useState<Partner[]>([]);
@@ -28,9 +38,11 @@ export default function Partenaires({ onNotificationClick, notificationCount }: 
       setIsLoading(true);
       setError('');
       const data = await getAllPartners();
-      setPartners(data);
+      const allPartners = [...defaultPartners, ...data].sort((a, b) => a.name.localeCompare(b.name));
+      setPartners(allPartners);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur lors du chargement des partenaires');
+      setPartners(defaultPartners);
     } finally {
       setIsLoading(false);
     }
@@ -42,6 +54,10 @@ export default function Partenaires({ onNotificationClick, notificationCount }: 
   };
 
   const handleEditPartner = (partner: Partner) => {
+    if (partner.id.startsWith('default-')) {
+      setError('Les partenaires par défaut ne peuvent pas être modifiés');
+      return;
+    }
     setEditingPartner(partner);
     setIsFormModalOpen(true);
   };
@@ -56,6 +72,10 @@ export default function Partenaires({ onNotificationClick, notificationCount }: 
   };
 
   const handleDeletePartner = async (partner: Partner) => {
+    if (partner.id.startsWith('default-')) {
+      setError('Les partenaires par défaut ne peuvent pas être supprimés');
+      return;
+    }
     setDeleteConfirmId(partner.id);
   };
 
@@ -127,17 +147,6 @@ export default function Partenaires({ onNotificationClick, notificationCount }: 
               <div className="flex items-center justify-center py-12">
                 <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
               </div>
-            ) : partners.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-500 font-light mb-4">Aucun partenaire pour le moment</p>
-                <button
-                  onClick={handleAddPartner}
-                  className="px-4 py-2 rounded-2xl bg-gradient-to-r from-blue-500 to-blue-600 text-white flex items-center gap-2 transition-all hover:from-blue-600 hover:to-blue-700 shadow-md mx-auto text-sm font-light"
-                >
-                  <Plus className="w-4 h-4" />
-                  Ajouter le premier partenaire
-                </button>
-              </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                 {partners.map((partner) => (
@@ -208,12 +217,13 @@ export default function Partenaires({ onNotificationClick, notificationCount }: 
         )}
       </div>
 
-      <PartnerFormModal
-        isOpen={isFormModalOpen}
-        onClose={() => setIsFormModalOpen(false)}
-        onSave={handleSavePartner}
-        partner={editingPartner}
-      />
+      {isFormModalOpen && (
+        <PartnerFormModal
+          onClose={() => setIsFormModalOpen(false)}
+          onSave={handleSavePartner}
+          partner={editingPartner}
+        />
+      )}
 
       {deleteConfirmId && (
         <>
