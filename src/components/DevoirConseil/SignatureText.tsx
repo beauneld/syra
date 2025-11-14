@@ -41,7 +41,7 @@ export default function SignatureText({ formData, contracts }: SignatureTextProp
     }
 
     if (contract.vp_optionnel) {
-      details.push(`VP: ${formatCurrency(contract.vp_optionnel)}`);
+      details.push(`VP optionnel: ${formatCurrency(contract.vp_optionnel)}`);
     }
 
     if (contract.vl) {
@@ -56,8 +56,40 @@ export default function SignatureText({ formData, contracts }: SignatureTextProp
       details.push(`Frais: ${contract.frais_chacun}%`);
     }
 
+    if (contract.frais_a_definir) {
+      details.push(`Frais à définir: ${contract.frais_a_definir}`);
+    }
+
     if (contract.frais_dossier) {
       details.push(`Frais de dossier: ${formatCurrency(contract.frais_dossier)}`);
+    }
+
+    if (contract.frais_transfert) {
+      details.push(`Frais de transfert: ${formatCurrency(contract.frais_transfert)}`);
+    }
+
+    if (contract.montant_transfert) {
+      details.push(`Montant transfert: ${formatCurrency(contract.montant_transfert)}`);
+    }
+
+    if (contract.numero_contrat) {
+      details.push(`N° contrat: ${contract.numero_contrat}`);
+    }
+
+    if (contract.date_effet) {
+      details.push(`Date d'effet: ${new Date(contract.date_effet).toLocaleDateString('fr-FR')}`);
+    }
+
+    if (contract.date_souscription) {
+      details.push(`Date de souscription: ${new Date(contract.date_souscription).toLocaleDateString('fr-FR')}`);
+    }
+
+    if (contract.loi_madelin) {
+      details.push('Loi Madelin');
+    }
+
+    if (contract.mma_elite) {
+      details.push('MMA Elite');
     }
 
     return details;

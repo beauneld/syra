@@ -575,27 +575,6 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                     </div>
                   )}
 
-                  {/* Comparative Proposals */}
-                  {selectedProduct && formData.propositions_comparatives.length > 0 && (
-                    <div className="p-4 bg-green-50/50 rounded-2xl border border-green-200/50">
-                      <label className="block text-sm font-medium text-gray-900 mb-3">
-                        Propositions comparatives automatiques
-                      </label>
-                      <div className="flex flex-wrap gap-2">
-                        {formData.propositions_comparatives.map((proposal, index) => (
-                          <span
-                            key={index}
-                            className="px-3 py-1.5 bg-white border border-green-300 text-green-700 rounded-full text-xs font-light shadow-sm"
-                          >
-                            {proposal}
-                          </span>
-                        ))}
-                      </div>
-                      <p className="mt-2 text-xs text-gray-500">
-                        Ces assureurs sont recommandés pour comparaison avec le produit sélectionné
-                      </p>
-                    </div>
-                  )}
                 </div>
               </div>
 

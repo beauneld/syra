@@ -32,7 +32,34 @@ export default function PredefinedMessagesModal({
 
   const loadMessages = async () => {
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+
+    // If no user, use mock data for development
+    if (!user) {
+      const mockMessages: PredefinedMessage[] = [
+        {
+          id: '1',
+          title: 'Couverture santé complète',
+          content: 'Ce contrat offre une couverture santé complète avec une prise en charge optimale des frais médicaux, incluant l\'hospitalisation, les soins dentaires et l\'optique.',
+          category: 'description',
+          user_id: '00000000-0000-0000-0000-000000000000',
+          is_active: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        },
+        {
+          id: '2',
+          title: 'Protection adaptée aux besoins',
+          content: 'Cette solution a été sélectionnée car elle correspond parfaitement à vos besoins exprimés et offre le meilleur rapport qualité-prix du marché.',
+          category: 'justification',
+          user_id: '00000000-0000-0000-0000-000000000000',
+          is_active: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+      ];
+      setMessages(mockMessages);
+      return;
+    }
 
     const { data, error } = await supabase
       .from('predefined_messages')
@@ -48,7 +75,14 @@ export default function PredefinedMessagesModal({
 
   const handleSave = async () => {
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+
+    if (!user) {
+      // Mode développement - simuler la sauvegarde
+      console.log('Mode développement - Message sauvegardé:', formData);
+      alert('Mode développement: Le message sera sauvegardé une fois authentifié');
+      resetForm();
+      return;
+    }
 
     if (editingId) {
       const { error } = await supabase

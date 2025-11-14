@@ -316,7 +316,7 @@ export default function NewDevoirConseil({ onClose, onSubmit, initialData, conse
   const handleSelectPredefinedMessage = (message: PredefinedMessage) => {
     if (selectedContractForMessage !== null) {
       if (messageFieldType === 'description') {
-        const currentValue = contractDescriptions[selectedContractForMessage] || '';
+        const currentValue = contractDescriptions[selectedContractForMessage] || contracts[selectedContractForMessage]?.gamme_contrat || '';
         const newValue = currentValue ? `${currentValue}\n\n${message.content}` : message.content;
         setContractDescriptions({...contractDescriptions, [selectedContractForMessage]: newValue});
       } else if (messageFieldType === 'justification') {
@@ -1408,14 +1408,47 @@ export default function NewDevoirConseil({ onClose, onSubmit, initialData, conse
               Accepte expressément que les contrats suivants soient souscrits:
             </p>
             {contracts.length > 0 && (
-              <ul className="list-disc list-inside space-y-1 ml-4">
-                {contracts.map((contract, index) => (
-                  <li key={index}>
-                    <span className="font-medium text-blue-600">{contract.gamme_contrat}</span> auprès de{' '}
-                    <span className="font-medium text-blue-600">{contract.assureur}</span>
-                  </li>
-                ))}
-              </ul>
+              <div className="ml-4 space-y-3">
+                {contracts.map((contract, index) => {
+                  const financialDetails = [];
+                  if (contract.montant_initial) financialDetails.push(`Montant initial: ${contract.montant_initial}`);
+                  if (contract.versement_programme) financialDetails.push(`Versement programmé: ${contract.versement_programme}`);
+                  if (contract.versement_initial) financialDetails.push(`Versement initial: ${contract.versement_initial}`);
+                  if (contract.periodicite) financialDetails.push(`Périodicité: ${contract.periodicite}`);
+                  if (contract.vp_optionnel) financialDetails.push(`VP optionnel: ${contract.vp_optionnel}`);
+                  if (contract.vl) financialDetails.push(`VL: ${contract.vl}`);
+                  if (contract.frais_versement) financialDetails.push(`Frais de versement: ${contract.frais_versement}%`);
+                  if (contract.frais_chacun) financialDetails.push(`Frais: ${contract.frais_chacun}%`);
+                  if (contract.frais_a_definir) financialDetails.push(`Frais à définir: ${contract.frais_a_definir}`);
+                  if (contract.frais_dossier) financialDetails.push(`Frais de dossier: ${contract.frais_dossier}`);
+                  if (contract.frais_transfert) financialDetails.push(`Frais de transfert: ${contract.frais_transfert}`);
+                  if (contract.montant_transfert) financialDetails.push(`Montant transfert: ${contract.montant_transfert}`);
+                  if (contract.numero_contrat) financialDetails.push(`N° contrat: ${contract.numero_contrat}`);
+                  if (contract.date_effet) financialDetails.push(`Date d'effet: ${new Date(contract.date_effet).toLocaleDateString('fr-FR')}`);
+                  if (contract.date_souscription) financialDetails.push(`Date de souscription: ${new Date(contract.date_souscription).toLocaleDateString('fr-FR')}`);
+                  if (contract.loi_madelin) financialDetails.push('Loi Madelin');
+                  if (contract.mma_elite) financialDetails.push('MMA Elite');
+
+                  return (
+                    <div key={index} className="border-l-2 border-blue-300 pl-4 py-1">
+                      <p>
+                        <span className="font-medium text-blue-600">
+                          {contract.produit || contract.gamme_contrat}
+                        </span>{' '}
+                        auprès de{' '}
+                        <span className="font-medium text-blue-600">{contract.assureur}</span>
+                      </p>
+                      {financialDetails.length > 0 && (
+                        <ul className="mt-1 space-y-0.5 text-xs text-gray-600">
+                          {financialDetails.map((detail, idx) => (
+                            <li key={idx} className="ml-4">• {detail}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             )}
             <p className="mt-4">
               Fait à <span className="font-medium text-blue-600">{formData.ville || '___________'}</span>,
@@ -1657,14 +1690,47 @@ export default function NewDevoirConseil({ onClose, onSubmit, initialData, conse
                         Accepte expressément que les contrats suivants soient souscrits:
                       </p>
                       {contracts.length > 0 && (
-                        <ul className="list-disc list-inside space-y-1 ml-4">
-                          {contracts.map((contract, index) => (
-                            <li key={index}>
-                              <span className="font-medium text-blue-600">{contract.gamme_contrat}</span> auprès de{' '}
-                              <span className="font-medium text-blue-600">{contract.assureur}</span>
-                            </li>
-                          ))}
-                        </ul>
+                        <div className="ml-4 space-y-3">
+                          {contracts.map((contract, index) => {
+                            const financialDetails = [];
+                            if (contract.montant_initial) financialDetails.push(`Montant initial: ${contract.montant_initial}`);
+                            if (contract.versement_programme) financialDetails.push(`Versement programmé: ${contract.versement_programme}`);
+                            if (contract.versement_initial) financialDetails.push(`Versement initial: ${contract.versement_initial}`);
+                            if (contract.periodicite) financialDetails.push(`Périodicité: ${contract.periodicite}`);
+                            if (contract.vp_optionnel) financialDetails.push(`VP optionnel: ${contract.vp_optionnel}`);
+                            if (contract.vl) financialDetails.push(`VL: ${contract.vl}`);
+                            if (contract.frais_versement) financialDetails.push(`Frais de versement: ${contract.frais_versement}%`);
+                            if (contract.frais_chacun) financialDetails.push(`Frais: ${contract.frais_chacun}%`);
+                            if (contract.frais_a_definir) financialDetails.push(`Frais à définir: ${contract.frais_a_definir}`);
+                            if (contract.frais_dossier) financialDetails.push(`Frais de dossier: ${contract.frais_dossier}`);
+                            if (contract.frais_transfert) financialDetails.push(`Frais de transfert: ${contract.frais_transfert}`);
+                            if (contract.montant_transfert) financialDetails.push(`Montant transfert: ${contract.montant_transfert}`);
+                            if (contract.numero_contrat) financialDetails.push(`N° contrat: ${contract.numero_contrat}`);
+                            if (contract.date_effet) financialDetails.push(`Date d'effet: ${new Date(contract.date_effet).toLocaleDateString('fr-FR')}`);
+                            if (contract.date_souscription) financialDetails.push(`Date de souscription: ${new Date(contract.date_souscription).toLocaleDateString('fr-FR')}`);
+                            if (contract.loi_madelin) financialDetails.push('Loi Madelin');
+                            if (contract.mma_elite) financialDetails.push('MMA Elite');
+
+                            return (
+                              <div key={index} className="border-l-2 border-blue-300 pl-4 py-1">
+                                <p>
+                                  <span className="font-medium text-blue-600">
+                                    {contract.produit || contract.gamme_contrat}
+                                  </span>{' '}
+                                  auprès de{' '}
+                                  <span className="font-medium text-blue-600">{contract.assureur}</span>
+                                </p>
+                                {financialDetails.length > 0 && (
+                                  <ul className="mt-1 space-y-0.5 text-xs text-gray-600">
+                                    {financialDetails.map((detail, idx) => (
+                                      <li key={idx} className="ml-4">• {detail}</li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
                       )}
                       <p className="mt-4">
                         Fait à <span className="font-medium text-blue-600">{formData.ville || '___________'}</span>,
