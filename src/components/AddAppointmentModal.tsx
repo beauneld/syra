@@ -20,9 +20,9 @@ interface AddAppointmentModalProps {
 }
 
 const mockLeads = [
-  { id: '1', name: 'Madame DAHCHAR', email: 'dahchar@icloud.com', phone: '0781170861' },
-  { id: '2', name: 'Monsieur DUPART', email: 'dupart33@gmail.com', phone: '0688523264' },
-  { id: '3', name: 'Yannick GOASDOUE', email: 'nikenyan0@gmail.com', phone: '0687180650' },
+  { id: '1', name: 'Madame DAHCHAR', email: 'dahchar@icloud.com', phone: '0781170861', status: 'RDV pris' },
+  { id: '2', name: 'Monsieur DUPART', email: 'dupart33@gmail.com', phone: '0688523264', status: 'À rappeler' },
+  { id: '3', name: 'Yannick GOASDOUE', email: 'nikenyan0@gmail.com', phone: '0687180650', status: 'NRP' },
 ];
 
 const mockUsers = [
@@ -46,11 +46,12 @@ export default function AddAppointmentModal({ onClose, appointment }: AddAppoint
   const [userSearchQuery, setUserSearchQuery] = useState('');
   const [selectedCalendar, setSelectedCalendar] = useState('1');
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [selectedLeadStatus, setSelectedLeadStatus] = useState<string | null>(null);
 
   const mockCalendars = [
-    { id: '1', name: 'Bienvisport', color: 'blue' },
-    { id: '2', name: 'Bienviyance', color: 'green' },
-    { id: '3', name: 'Entoria', color: 'orange' },
+    { id: '1', name: 'Ornella Attard', color: 'blue' },
+    { id: '2', name: 'Benjamin Zaoui', color: 'green' },
+    { id: '3', name: 'Maor Assouline', color: 'orange' },
   ];
 
   useEffect(() => {
@@ -147,7 +148,13 @@ export default function AddAppointmentModal({ onClose, appointment }: AddAppoint
                       type="button"
                       onClick={() => {
                         setSelectedLead(lead.id);
+                        setSelectedLeadStatus(lead.status);
                         setSearchQuery('');
+                        if (lead.status === 'RDV pris') {
+                          setDuration('60');
+                        } else if (lead.status === 'À rappeler') {
+                          setDuration('30');
+                        }
                       }}
                       className="w-full p-3 bg-white/80 hover:bg-white rounded-2xl border border-gray-200/50 flex items-center gap-3 transition-all text-left"
                     >
@@ -158,6 +165,14 @@ export default function AddAppointmentModal({ onClose, appointment }: AddAppoint
                         <p className="text-sm font-light text-gray-900">{lead.name}</p>
                         <p className="text-xs text-gray-600 font-light">{lead.email}</p>
                       </div>
+                      <span className={`text-xs px-2 py-1 rounded-full font-light ${
+                        lead.status === 'RDV pris' ? 'bg-green-100 text-green-700' :
+                        lead.status === 'À rappeler' ? 'bg-blue-100 text-blue-700' :
+                        lead.status === 'NRP' ? 'bg-orange-100 text-orange-700' :
+                        'bg-gray-100 text-gray-700'
+                      }`}>
+                        {lead.status}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -169,12 +184,27 @@ export default function AddAppointmentModal({ onClose, appointment }: AddAppoint
                     {mockLeads.find(l => l.id === selectedLead)?.name.split(' ').map(n => n[0]).join('')}
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-light text-gray-900">{mockLeads.find(l => l.id === selectedLead)?.name}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-light text-gray-900">{mockLeads.find(l => l.id === selectedLead)?.name}</p>
+                      {selectedLeadStatus && (
+                        <span className={`text-xs px-2 py-1 rounded-full font-light ${
+                          selectedLeadStatus === 'RDV pris' ? 'bg-green-100 text-green-700' :
+                          selectedLeadStatus === 'À rappeler' ? 'bg-blue-100 text-blue-700' :
+                          selectedLeadStatus === 'NRP' ? 'bg-orange-100 text-orange-700' :
+                          'bg-gray-100 text-gray-700'
+                        }`}>
+                          {selectedLeadStatus}
+                        </span>
+                      )}
+                    </div>
                     <p className="text-xs text-gray-600 font-light">{mockLeads.find(l => l.id === selectedLead)?.email}</p>
                   </div>
                   <button
                     type="button"
-                    onClick={() => setSelectedLead(null)}
+                    onClick={() => {
+                      setSelectedLead(null);
+                      setSelectedLeadStatus(null);
+                    }}
                     className="w-6 h-6 rounded-full bg-white hover:bg-gray-100 flex items-center justify-center transition-all"
                   >
                     <X className="w-3 h-3 text-gray-600" />
@@ -218,11 +248,17 @@ export default function AddAppointmentModal({ onClose, appointment }: AddAppoint
                 <label className="block text-sm font-light text-gray-700 mb-2 flex items-center gap-2">
                   <Clock className="w-4 h-4 text-gray-400" />
                   Durée
+                  {selectedLeadStatus && (
+                    <span className="text-xs text-gray-500">
+                      ({selectedLeadStatus === 'RDV pris' ? '1h obligatoire' : selectedLeadStatus === 'À rappeler' ? '30min obligatoire' : ''})
+                    </span>
+                  )}
                 </label>
                 <select
                   value={duration}
                   onChange={(e) => setDuration(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                  disabled={selectedLeadStatus === 'RDV pris' || selectedLeadStatus === 'À rappeler'}
+                  className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light disabled:bg-gray-100 disabled:cursor-not-allowed"
                 >
                   <option value="15">15 minutes</option>
                   <option value="30">30 minutes</option>

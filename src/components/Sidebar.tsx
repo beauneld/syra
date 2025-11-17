@@ -73,6 +73,7 @@ export default function Sidebar({ currentPage, onNavigate, onCollapseChange, onL
 
   const permissions = currentProfile ? getProfilePermissions(currentProfile.profile_type) : null;
   const shouldShowManagement = permissions?.canAccessManagement ?? true;
+  const isTeleprospecteur = currentProfile?.profile_type === 'Téléprospecteur';
 
   const handleCollapseToggle = () => {
     const newCollapsedState = !isCollapsed;
@@ -85,7 +86,7 @@ export default function Sidebar({ currentPage, onNavigate, onCollapseChange, onL
     setIsMobileMenuOpen(false);
   };
 
-  const mainMenuItems = [
+  const mainMenuItems = isTeleprospecteur ? [] : [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
   ];
 
@@ -94,7 +95,7 @@ export default function Sidebar({ currentPage, onNavigate, onCollapseChange, onL
     { id: 'calendrier', label: 'Agenda', icon: Calendar },
   ];
 
-  const meetingItems = [
+  const meetingItems = isTeleprospecteur ? [] : [
     { id: 'partenaires', label: 'Partenaires', icon: Handshake },
     { id: 'mise-en-relation', label: 'Mise en relation', icon: Send },
     { id: 'simulation-per', label: 'Simulation PER', icon: Calculator },
@@ -215,29 +216,32 @@ export default function Sidebar({ currentPage, onNavigate, onCollapseChange, onL
       </div>
 
       <nav className="flex-1 overflow-y-auto px-4 pb-4">
-        <div className="space-y-1 mb-4">
-          {mainMenuItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = currentPage === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => handleMobileNavigate(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 text-sm rounded-2xl transition-all ${
-                  isActive
-                    ? 'bg-white/80 backdrop-blur-sm text-gray-900 shadow-md font-light'
-                    : 'text-gray-600 hover:bg-white/50 hover:text-gray-900 font-light'
-                } ${isCollapsed ? 'justify-center' : ''}`}
-                title={isCollapsed ? item.label : undefined}
-              >
-                <Icon className={`w-5 h-5 ${isActive ? 'text-blue-500' : 'text-gray-400'}`} />
-                {!isCollapsed && <span>{item.label}</span>}
-              </button>
-            );
-          })}
-        </div>
-
-        {!isCollapsed && <div className="border-t border-gray-200/30 my-4"></div>}
+        {mainMenuItems.length > 0 && (
+          <>
+            <div className="space-y-1 mb-4">
+              {mainMenuItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = currentPage === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handleMobileNavigate(item.id)}
+                    className={`w-full flex items-center gap-3 px-4 py-3 text-sm rounded-2xl transition-all ${
+                      isActive
+                        ? 'bg-white/80 backdrop-blur-sm text-gray-900 shadow-md font-light'
+                        : 'text-gray-600 hover:bg-white/50 hover:text-gray-900 font-light'
+                    } ${isCollapsed ? 'justify-center' : ''}`}
+                    title={isCollapsed ? item.label : undefined}
+                  >
+                    <Icon className={`w-5 h-5 ${isActive ? 'text-blue-500' : 'text-gray-400'}`} />
+                    {!isCollapsed && <span>{item.label}</span>}
+                  </button>
+                );
+              })}
+            </div>
+            {!isCollapsed && <div className="border-t border-gray-200/30 my-4"></div>}
+          </>
+        )}
 
         <div>
           {!isCollapsed && (
@@ -270,40 +274,43 @@ export default function Sidebar({ currentPage, onNavigate, onCollapseChange, onL
           </div>
         </div>
 
-        {!isCollapsed && <div className="border-t border-gray-200/30 my-4"></div>}
+        {!isCollapsed && !isTeleprospecteur && <div className="border-t border-gray-200/30 my-4"></div>}
 
-        <div>
-          {!isCollapsed && (
-            <div className="px-3 mb-2">
-              <span className="text-xs font-light text-gray-400 uppercase tracking-wider">
-                Rendez-vous
-              </span>
+        {meetingItems.length > 0 && (
+          <>
+            <div>
+              {!isCollapsed && (
+                <div className="px-3 mb-2">
+                  <span className="text-xs font-light text-gray-400 uppercase tracking-wider">
+                    Rendez-vous
+                  </span>
+                </div>
+              )}
+              <div className="space-y-1 mb-4">
+                {meetingItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = currentPage === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => handleMobileNavigate(item.id)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 text-sm rounded-2xl transition-all ${
+                        isActive
+                          ? 'bg-white/80 backdrop-blur-sm text-gray-900 shadow-md font-light'
+                          : 'text-gray-600 hover:bg-white/50 hover:text-gray-900 font-light'
+                      } ${isCollapsed ? 'justify-center' : ''}`}
+                      title={isCollapsed ? item.label : undefined}
+                    >
+                      <Icon className={`w-5 h-5 ${isActive ? 'text-blue-500' : 'text-gray-400'}`} />
+                      {!isCollapsed && <span>{item.label}</span>}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          )}
-          <div className="space-y-1 mb-4">
-            {meetingItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = currentPage === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleMobileNavigate(item.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 text-sm rounded-2xl transition-all ${
-                    isActive
-                      ? 'bg-white/80 backdrop-blur-sm text-gray-900 shadow-md font-light'
-                      : 'text-gray-600 hover:bg-white/50 hover:text-gray-900 font-light'
-                  } ${isCollapsed ? 'justify-center' : ''}`}
-                  title={isCollapsed ? item.label : undefined}
-                >
-                  <Icon className={`w-5 h-5 ${isActive ? 'text-blue-500' : 'text-gray-400'}`} />
-                  {!isCollapsed && <span>{item.label}</span>}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {!isCollapsed && <div className="border-t border-gray-200/30 my-4"></div>}
+            {!isCollapsed && <div className="border-t border-gray-200/30 my-4"></div>}
+          </>
+        )}
 
         <div>
           {!isCollapsed && (

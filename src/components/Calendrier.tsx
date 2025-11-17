@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Plus, Bell, Eye, EyeOff } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, Bell, Eye, EyeOff, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import AddAppointmentModal from './AddAppointmentModal';
 import AppointmentDetailsModal from './AppointmentDetailsModal';
@@ -9,6 +9,7 @@ import {
   calculateAppointmentColumns,
   type AppointmentWithPosition
 } from '../utils/calendarUtils';
+import { getActiveProfile, UserProfile } from '../services/profileService';
 
 interface CalendrierProps {
   onNotificationClick: () => void;
@@ -16,9 +17,9 @@ interface CalendrierProps {
 }
 
 const mockCalendars = [
-  { id: '1', name: 'Bienvisport', color: 'blue' },
-  { id: '2', name: 'Bienviyance', color: 'green' },
-  { id: '3', name: 'Entoria', color: 'orange' },
+  { id: '1', name: 'Ornella Attard', color: 'blue' },
+  { id: '2', name: 'Benjamin Zaoui', color: 'green' },
+  { id: '3', name: 'Maor Assouline', color: 'orange' },
 ];
 
 const getCurrentWeekDates = () => {
@@ -89,7 +90,10 @@ export default function Calendrier({ onNotificationClick, notificationCount }: C
   const [editingAppointment, setEditingAppointment] = useState<any>(null);
   const [newAppointmentTime, setNewAppointmentTime] = useState<{date: Date; hour: number} | null>(null);
   const [view, setView] = useState<CalendarView>('day');
-  const [visibleCalendars, setVisibleCalendars] = useState<string[]>(mockCalendars.map(c => c.id));
+  const [currentProfile, setCurrentProfile] = useState<UserProfile | null>(null);
+  const [availableCalendars, setAvailableCalendars] = useState<typeof mockCalendars>([]);
+  const [visibleCalendars, setVisibleCalendars] = useState<string[]>([]);
+  const [showCalendarDropdown, setShowCalendarDropdown] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [draggedAppointment, setDraggedAppointment] = useState<any>(null);
   const [appointments, setAppointments] = useState(getInitialAppointments());
@@ -108,6 +112,43 @@ export default function Calendrier({ onNotificationClick, notificationCount }: C
   ];
   const daysOfWeek = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
   const currentMonth = currentDate.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  const loadProfile = async () => {
+    try {
+      const profile = await getActiveProfile();
+      setCurrentProfile(profile);
+
+      let calendarsToShow: typeof mockCalendars = [];
+
+      if (!profile) {
+        calendarsToShow = mockCalendars;
+      } else {
+        const fullName = `${profile.first_name} ${profile.last_name}`;
+
+        if (fullName === 'Ornella Attard') {
+          calendarsToShow = mockCalendars;
+        } else if (fullName === 'Benjamin Zaoui') {
+          calendarsToShow = mockCalendars.filter(cal =>
+            cal.name === 'Benjamin Zaoui' || cal.name === 'Ornella Attard'
+          );
+        } else {
+          const userCalendar = mockCalendars.find(cal => cal.name === fullName);
+          calendarsToShow = userCalendar ? [userCalendar] : mockCalendars;
+        }
+      }
+
+      setAvailableCalendars(calendarsToShow);
+      setVisibleCalendars(calendarsToShow.map(c => c.id));
+    } catch (err) {
+      console.error('Error loading profile:', err);
+      setAvailableCalendars(mockCalendars);
+      setVisibleCalendars(mockCalendars.map(c => c.id));
+    }
+  };
 
   const getAppointmentsForDay = (date: Date) => {
     return appointments.filter(apt => {
@@ -427,28 +468,46 @@ export default function Calendrier({ onNotificationClick, notificationCount }: C
             <div className="absolute inset-0 bg-white/60 backdrop-blur-md z-10 rounded-xl transition-opacity duration-150"></div>
           )}
           <div className="flex items-center justify-between gap-3 mb-1.5 flex-shrink-0 flex-wrap">
-            <div className="flex items-center gap-2 flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-1 min-w-0 relative">
               <span className="text-sm font-light text-gray-700 whitespace-nowrap flex-shrink-0">Calendriers :</span>
-              <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent py-1 flex-1 min-w-0">
-                {mockCalendars.map((calendar) => (
-                  <button
-                    key={calendar.id}
-                    onClick={() => toggleCalendarVisibility(calendar.id)}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all flex-shrink-0 ${
-                      visibleCalendars.includes(calendar.id)
-                        ? 'bg-white border-gray-200 shadow-sm'
-                        : 'bg-gray-100 border-gray-200 opacity-50'
-                    }`}
-                  >
-                    <div className={`w-2.5 h-2.5 rounded-full ${getColorClasses(calendar.color)}`} />
-                    <span className="text-xs font-light text-gray-900 whitespace-nowrap">{calendar.name}</span>
-                    {visibleCalendars.includes(calendar.id) ? (
-                      <Eye className="w-3.5 h-3.5 text-gray-600" />
-                    ) : (
-                      <EyeOff className="w-3.5 h-3.5 text-gray-400" />
-                    )}
-                  </button>
-                ))}
+              <div className="relative">
+                <button
+                  onClick={() => setShowCalendarDropdown(!showCalendarDropdown)}
+                  className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-light hover:bg-gray-50 transition-all shadow-sm"
+                >
+                  <span className="text-gray-700">{visibleCalendars.length} sélectionné{visibleCalendars.length > 1 ? 's' : ''}</span>
+                  <ChevronDown className={`w-4 h-4 text-gray-600 transition-transform ${showCalendarDropdown ? 'rotate-180' : ''}`} />
+                </button>
+                {showCalendarDropdown && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-10"
+                      onClick={() => setShowCalendarDropdown(false)}
+                    />
+                    <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-200 p-3 z-20">
+                      {availableCalendars.map((calendar) => (
+                        <label
+                          key={calendar.id}
+                          className="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-xl cursor-pointer transition-colors"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={visibleCalendars.includes(calendar.id)}
+                            onChange={() => toggleCalendarVisibility(calendar.id)}
+                            className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-400/50"
+                          />
+                          <div className={`w-3 h-3 rounded-full ${getColorClasses(calendar.color)}`} />
+                          <span className="text-sm font-light text-gray-900 flex-1">{calendar.name}</span>
+                          {visibleCalendars.includes(calendar.id) ? (
+                            <Eye className="w-4 h-4 text-gray-600" />
+                          ) : (
+                            <EyeOff className="w-4 h-4 text-gray-400" />
+                          )}
+                        </label>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">

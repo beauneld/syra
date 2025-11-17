@@ -88,7 +88,13 @@ export default function SimulationPER({ onNotificationClick, notificationCount }
       const ceiling = Math.min(annualIncome * 0.1, 35194);
       setTaxCeiling(Math.round(ceiling));
     } else {
-      const ceiling = Math.min(annualIncome * 0.1 + 16097, 35194 + 16097);
+      let ceiling;
+      if (annualIncome <= 48000) {
+        ceiling = annualIncome * 0.1;
+      } else {
+        ceiling = 48000 * 0.1 + (annualIncome - 48000) * 0.15;
+      }
+      ceiling = Math.min(ceiling + 16097, 35194 + 16097);
       setTaxCeiling(Math.round(ceiling));
     }
   };

@@ -1,4 +1,4 @@
-import { Users, Phone, Calendar, FileCheck, Search, Filter, MoreHorizontal, Bell, Euro, TrendingUp, Clock, RefreshCw, X, StickyNote, CheckSquare, BarChart3, Upload, FileText } from 'lucide-react';
+import { Users, Phone, Calendar, FileCheck, Search, Filter, MoreHorizontal, Bell, Euro, TrendingUp, Clock, RefreshCw, X, StickyNote, CheckSquare, BarChart3, Upload, FileText, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Lead, Contract } from '../types';
 
@@ -110,6 +110,12 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
   const [leadsChartPeriod, setLeadsChartPeriod] = useState<'week' | 'month'>('week');
   const [fadingMemos, setFadingMemos] = useState<Set<string>>(new Set());
   const [visibleMemos, setVisibleMemos] = useState<Set<string>>(() => new Set(mockMemos.map(m => m.id)));
+  const [showAddMemoForm, setShowAddMemoForm] = useState(false);
+  const [newMemoTitle, setNewMemoTitle] = useState('');
+  const [newMemoDate, setNewMemoDate] = useState('');
+  const [newMemoTime, setNewMemoTime] = useState('');
+  const [newMemoDescription, setNewMemoDescription] = useState('');
+  const [memos, setMemos] = useState<Memo[]>(mockMemos);
 
   const mockContracts: Contract[] = [
     {
@@ -247,6 +253,31 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
     }, 400);
   };
 
+  const handleAddMemo = () => {
+    if (!newMemoTitle || !newMemoDate || !newMemoTime) {
+      alert('Veuillez remplir tous les champs obligatoires');
+      return;
+    }
+
+    const newMemo: Memo = {
+      id: Date.now().toString(),
+      title: newMemoTitle,
+      date: newMemoDate,
+      time: newMemoTime,
+      user: 'Vous',
+      color: 'blue'
+    };
+
+    setMemos(prev => [newMemo, ...prev]);
+    setVisibleMemos(prev => new Set([...Array.from(prev), newMemo.id]));
+
+    setNewMemoTitle('');
+    setNewMemoDate('');
+    setNewMemoTime('');
+    setNewMemoDescription('');
+    setShowAddMemoForm(false);
+  };
+
   return (
     <div className="flex-1 overflow-auto">
       <header className="glass-card ml-20 mr-4 lg:mx-8 mt-4 md:mt-6 lg:mt-8 px-4 md:px-6 lg:px-8 py-4 md:py-5 flex items-center justify-between floating-shadow">
@@ -306,7 +337,7 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
                 <div className="flex items-baseline gap-2">
                   <p className="text-xl font-light text-gray-900">{mockMemos.length}</p>
                   <span className="text-xs font-light px-2 py-1 rounded-full bg-red-200/50 text-red-700 border border-red-300/30">
-                    urgent
+                    {memos.length} total
                   </span>
                 </div>
               </div>
@@ -521,16 +552,96 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
             <div className="bg-white rounded-3xl shadow-2xl p-6 max-w-3xl w-full max-h-[80vh] overflow-y-auto border border-gray-200">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-light text-gray-900">Mémos & Rappels</h3>
-                <button
-                  onClick={() => setShowMemosModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <X className="w-5 h-5 text-gray-600" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setShowAddMemoForm(!showAddMemoForm)}
+                    className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all flex items-center gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Ajouter un mémo
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowMemosModal(false);
+                      setShowAddMemoForm(false);
+                    }}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <X className="w-5 h-5 text-gray-600" />
+                  </button>
+                </div>
               </div>
 
+              {showAddMemoForm && (
+                <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-blue-100/30 rounded-2xl border border-blue-200/50">
+                  <h4 className="text-sm font-medium text-gray-900 mb-4">Nouveau mémo</h4>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-light text-gray-700 mb-1">Titre du mémo *</label>
+                      <input
+                        type="text"
+                        value={newMemoTitle}
+                        onChange={(e) => setNewMemoTitle(e.target.value)}
+                        placeholder="Titre du mémo"
+                        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-light text-gray-700 mb-1">Date *</label>
+                        <input
+                          type="date"
+                          value={newMemoDate}
+                          onChange={(e) => setNewMemoDate(e.target.value)}
+                          className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-light text-gray-700 mb-1">Heure *</label>
+                        <input
+                          type="time"
+                          value={newMemoTime}
+                          onChange={(e) => setNewMemoTime(e.target.value)}
+                          className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-light text-gray-700 mb-1">Description</label>
+                      <textarea
+                        value={newMemoDescription}
+                        onChange={(e) => setNewMemoDescription(e.target.value)}
+                        placeholder="Description du mémo (optionnel)"
+                        rows={3}
+                        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light resize-none"
+                      />
+                    </div>
+                    <div className="flex gap-2 justify-end">
+                      <button
+                        onClick={() => {
+                          setShowAddMemoForm(false);
+                          setNewMemoTitle('');
+                          setNewMemoDate('');
+                          setNewMemoTime('');
+                          setNewMemoDescription('');
+                        }}
+                        className="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-full text-sm font-light hover:bg-gray-50 transition-all"
+                      >
+                        Annuler
+                      </button>
+                      <button
+                        onClick={handleAddMemo}
+                        className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all"
+                      >
+                        Ajouter
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-3">
-                {mockMemos.filter(memo => visibleMemos.has(memo.id)).map((memo) => (
+                {memos.filter(memo => visibleMemos.has(memo.id)).map((memo) => (
                   <div
                     key={memo.id}
                     onClick={() => handleMemoClick(memo.id)}
