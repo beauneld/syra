@@ -157,7 +157,7 @@ export default function Partenaires({ onNotificationClick, notificationCount }: 
                   <span className="hidden sm:inline">Ajouter un partenaire</span>
                 </button>
               ) : (
-                <div className="flex items-center gap-2 text-gray-500 text-xs font-light" title="Réservé aux Admin et Manager+">
+                <div className="flex items-center gap-2 text-gray-500 text-xs font-light" title="Réservé aux Admin, Manager et Gestion">
                   <Lock className="w-4 h-4" />
                   <span className="hidden sm:inline">Mode consultation</span>
                 </div>

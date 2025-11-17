@@ -2,11 +2,12 @@ import { supabase } from '../lib/supabase';
 
 export interface UserProfile {
   id: string;
-  profile_type: 'Admin' | 'Manager+' | 'Manager' | 'Conseiller';
+  profile_type: 'Admin' | 'Manager' | 'Gestion' | 'Signataire' | 'Téléprospecteur';
   first_name: string;
   last_name: string;
   email: string;
   photo_url: string;
+  advisor_brochure_url?: string;
   team_manager_id: string | null;
   is_active: boolean;
   created_at: string;
@@ -76,7 +77,7 @@ export function getProfilePermissions(profileType: string): ProfilePermissions {
         canManageOrganizationSettings: true,
         canEditAdvisorPdf: true,
       };
-    case 'Manager+':
+    case 'Manager':
       return {
         canAccessManagement: true,
         canViewAllData: true,
@@ -89,7 +90,20 @@ export function getProfilePermissions(profileType: string): ProfilePermissions {
         canManageOrganizationSettings: true,
         canEditAdvisorPdf: true,
       };
-    case 'Manager':
+    case 'Gestion':
+      return {
+        canAccessManagement: true,
+        canViewAllData: true,
+        canEditAllData: true,
+        canViewTeamData: true,
+        canEditOwnData: true,
+        canViewSharedAppointments: true,
+        canManagePartners: true,
+        canEditEmailTemplates: true,
+        canManageOrganizationSettings: true,
+        canEditAdvisorPdf: true,
+      };
+    case 'Signataire':
       return {
         canAccessManagement: false,
         canViewAllData: false,
@@ -102,7 +116,7 @@ export function getProfilePermissions(profileType: string): ProfilePermissions {
         canManageOrganizationSettings: false,
         canEditAdvisorPdf: false,
       };
-    case 'Conseiller':
+    case 'Téléprospecteur':
       return {
         canAccessManagement: false,
         canViewAllData: false,
@@ -135,11 +149,13 @@ export function getProfileBadgeColor(profileType: string): string {
   switch (profileType) {
     case 'Admin':
       return 'bg-red-100 text-red-700';
-    case 'Manager+':
-      return 'bg-blue-100 text-blue-700';
     case 'Manager':
+      return 'bg-orange-100 text-orange-700';
+    case 'Gestion':
+      return 'bg-blue-100 text-blue-700';
+    case 'Signataire':
       return 'bg-green-100 text-green-700';
-    case 'Conseiller':
+    case 'Téléprospecteur':
       return 'bg-gray-100 text-gray-700';
     default:
       return 'bg-gray-100 text-gray-700';

@@ -16,6 +16,7 @@ export default function SimulationPER({ onNotificationClick, notificationCount }
   const [clientFirstName, setClientFirstName] = useState('');
   const [clientLastName, setClientLastName] = useState('');
   const [clientEmail, setClientEmail] = useState('');
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const [professionalStatus, setProfessionalStatus] = useState<'Salarié' | 'Indépendant'>('Salarié');
   const [annualIncome, setAnnualIncome] = useState(0);
@@ -145,7 +146,8 @@ export default function SimulationPER({ onNotificationClick, notificationCount }
   };
 
   const handleSendEmail = () => {
-    alert('Simulation envoyée par email');
+    setShowSuccessMessage(true);
+    setTimeout(() => setShowSuccessMessage(false), 5000);
   };
 
   const circlePercentage = (returnRate / 10) * 100;
@@ -509,7 +511,7 @@ export default function SimulationPER({ onNotificationClick, notificationCount }
             le profil équilibré correspond à un équilibre entre performance financière et épargne sécurisée, le profil
             dynamique s'adresse à des épargnants désireux d'obtenir des performances élevées.
           </p>
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center gap-4">
             <button
               onClick={handleSendEmail}
               className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all hover:scale-105 flex items-center gap-2"
@@ -517,6 +519,13 @@ export default function SimulationPER({ onNotificationClick, notificationCount }
               <Send className="w-4 h-4" />
               Envoyer la simulation
             </button>
+            {showSuccessMessage && (
+              <div className="p-3 bg-green-50 border border-green-200 rounded-2xl w-full max-w-md">
+                <p className="text-sm font-light text-green-700 text-center">
+                  La simulation a été envoyée avec succès
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
-import { Plus, Search, MoreHorizontal, X, Bell, UserPlus, Trash2, Edit2 } from 'lucide-react';
+import { Plus, Search, MoreHorizontal, X, Bell, UserPlus, Trash2, Edit2, FileText, Upload } from 'lucide-react';
 import { useState } from 'react';
 import { User } from '../types';
+import { uploadAdvisorBrochure, deleteAdvisorBrochure, getAdvisorBrochureUrl, updateUserBrochure } from '../services/advisorBrochureService';
 
 const mockUsers: User[] = [
   {
@@ -9,7 +10,7 @@ const mockUsers: User[] = [
     email: 'e.aboukrat@bnvce.fr',
     first_name: 'Ethan',
     last_name: 'Aboukrat',
-    role: 'collaborateur',
+    role: 'teleprospecteur',
     is_active: true,
     created_at: '2025-10-02',
     updated_at: '2025-10-02',
@@ -20,7 +21,7 @@ const mockUsers: User[] = [
     email: 'd.alamihamdouni@bnvce.fr',
     first_name: 'Driss',
     last_name: 'Alami hamdouni',
-    role: 'collaborateur',
+    role: 'teleprospecteur',
     is_active: true,
     created_at: '2025-10-02',
     updated_at: '2025-10-02',
@@ -31,7 +32,7 @@ const mockUsers: User[] = [
     email: 'm.assouline@bnvce.fr',
     first_name: 'Maor',
     last_name: 'Assouline',
-    role: 'collaborateur',
+    role: 'teleprospecteur',
     is_active: true,
     created_at: '2025-10-02',
     updated_at: '2025-10-02',
@@ -42,7 +43,7 @@ const mockUsers: User[] = [
     email: 's.atlan@bnvce.fr',
     first_name: 'Sacha',
     last_name: 'Atlan',
-    role: 'collaborateur',
+    role: 'signataire',
     is_active: true,
     created_at: '2025-10-02',
     updated_at: '2025-10-02',
@@ -53,7 +54,7 @@ const mockUsers: User[] = [
     email: 'o.attard@bnvce.fr',
     first_name: 'Ornella',
     last_name: 'Attard',
-    role: 'collaborateur',
+    role: 'teleprospecteur',
     is_active: true,
     created_at: '2025-10-02',
     updated_at: '2025-10-02',
@@ -64,7 +65,7 @@ const mockUsers: User[] = [
     email: 'moche.azran@bnvce.fr',
     first_name: 'Moche',
     last_name: 'Azran',
-    role: 'manager',
+    role: 'gestion',
     is_active: true,
     created_at: '2025-10-02',
     updated_at: '2025-10-02',
@@ -118,23 +119,43 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
     first_name: '',
     last_name: '',
     email: '',
-    role: 'collaborateur' as 'collaborateur' | 'manager',
+    role: 'gestion' as 'gestion' | 'signataire' | 'teleprospecteur',
     assigned_lists: [] as string[],
   });
+  const [brochureFile, setBrochureFile] = useState<File | null>(null);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [editFormData, setEditFormData] = useState({
     first_name: '',
     last_name: '',
     email: '',
     password: '',
-    role: 'collaborateur' as 'collaborateur' | 'manager',
+    role: 'gestion' as 'gestion' | 'signataire' | 'teleprospecteur',
     is_active: true,
     assigned_lists: [] as string[],
   });
+  const [editBrochureFile, setEditBrochureFile] = useState<File | null>(null);
+  const [existingBrochureUrl, setExistingBrochureUrl] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setShowModal(false);
-    setFormData({ first_name: '', last_name: '', email: '', role: 'collaborateur', assigned_lists: [] });
+
+    try {
+      let brochureFileName: string | null = null;
+
+      if (formData.role === 'signataire' && brochureFile) {
+        brochureFileName = await uploadAdvisorBrochure(brochureFile, 'temp-id');
+      }
+
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 5000);
+
+      setShowModal(false);
+      setFormData({ first_name: '', last_name: '', email: '', role: 'gestion', assigned_lists: [] });
+      setBrochureFile(null);
+    } catch (error) {
+      console.error('Error creating user:', error);
+      alert(error instanceof Error ? error.message : 'Erreur lors de la création de l\'utilisateur');
+    }
   };
 
   const handleEditClick = (user: User) => {
@@ -144,26 +165,44 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
       last_name: user.last_name,
       email: user.email,
       password: '',
-      role: user.role,
+      role: user.role as 'gestion' | 'signataire' | 'teleprospecteur',
       is_active: user.is_active,
       assigned_lists: mockListAssignments[user.id] || [],
     });
+    setExistingBrochureUrl(user.advisor_brochure_url || null);
+    setEditBrochureFile(null);
     setShowEditModal(true);
   };
 
-  const handleEditSubmit = (e: React.FormEvent) => {
+  const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setShowEditModal(false);
-    setUserToEdit(null);
-    setEditFormData({
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      role: 'collaborateur',
-      is_active: true,
-      assigned_lists: [],
-    });
+
+    try {
+      if (userToEdit && editFormData.role === 'signataire' && editBrochureFile) {
+        if (existingBrochureUrl) {
+          await deleteAdvisorBrochure(existingBrochureUrl);
+        }
+        const brochureFileName = await uploadAdvisorBrochure(editBrochureFile, userToEdit.id);
+        await updateUserBrochure(userToEdit.id, brochureFileName);
+      }
+
+      setShowEditModal(false);
+      setUserToEdit(null);
+      setEditFormData({
+        first_name: '',
+        last_name: '',
+        email: '',
+        password: '',
+        role: 'gestion',
+        is_active: true,
+        assigned_lists: [],
+      });
+      setEditBrochureFile(null);
+      setExistingBrochureUrl(null);
+    } catch (error) {
+      console.error('Error updating user:', error);
+      alert(error instanceof Error ? error.message : 'Erreur lors de la mise à jour de l\'utilisateur');
+    }
   };
 
   const toggleListInFormData = (list: string) => {
@@ -255,6 +294,15 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
                       </div>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
+                      {user.role === 'signataire' && user.advisor_brochure_url && (
+                        <button
+                          onClick={() => window.open(getAdvisorBrochureUrl(user.advisor_brochure_url!), '_blank')}
+                          className="w-8 h-8 rounded-full bg-green-50 hover:bg-green-100 flex items-center justify-center transition-all hover:scale-105 shadow-sm"
+                          title="Voir la plaquette"
+                        >
+                          <FileText className="w-4 h-4 text-green-600" />
+                        </button>
+                      )}
                       <button
                         onClick={() => handleEditClick(user)}
                         className="w-8 h-8 rounded-full bg-blue-50 hover:bg-blue-100 flex items-center justify-center transition-all hover:scale-105 shadow-sm"
@@ -274,11 +322,17 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
 
                   <div className="flex items-center gap-2 mb-4">
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-light border ${
-                      user.role === 'manager'
-                        ? 'bg-gradient-to-r from-pink-100 to-pink-50 text-pink-700 border-pink-200/50'
-                        : 'bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700 border-blue-200/50'
+                      user.role === 'admin'
+                        ? 'bg-gradient-to-r from-red-100 to-red-50 text-red-700 border-red-200/50'
+                        : user.role === 'manager'
+                        ? 'bg-gradient-to-r from-orange-100 to-orange-50 text-orange-700 border-orange-200/50'
+                        : user.role === 'gestion'
+                        ? 'bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700 border-blue-200/50'
+                        : user.role === 'signataire'
+                        ? 'bg-gradient-to-r from-green-100 to-green-50 text-green-700 border-green-200/50'
+                        : 'bg-gradient-to-r from-gray-100 to-gray-50 text-gray-700 border-gray-200/50'
                     }`}>
-                      {user.role === 'manager' ? 'Manager' : 'Collaborateur'}
+                      {user.role === 'admin' ? 'Admin' : user.role === 'manager' ? 'Manager' : user.role === 'gestion' ? 'Gestion' : user.role === 'signataire' ? 'Signataire' : 'Téléprospecteur'}
                     </span>
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-light border ${
                       user.is_active
@@ -341,7 +395,7 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
                           ? 'bg-gradient-to-r from-pink-100 to-pink-50 text-pink-700 border-pink-200/50'
                           : 'bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700 border-blue-200/50'
                       }`}>
-                        {user.role === 'manager' ? 'Manager' : 'Collaborateur'}
+                        {user.role === 'admin' ? 'Admin' : user.role === 'manager' ? 'Manager' : user.role === 'gestion' ? 'Gestion' : user.role === 'signataire' ? 'Signataire' : 'Téléprospecteur'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -432,13 +486,64 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
                 <label className="block text-sm font-light text-gray-700 mb-2">Rôle</label>
                 <select
                   value={formData.role}
-                  onChange={(e) => setFormData({ ...formData, role: e.target.value as 'collaborateur' | 'manager' })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, role: e.target.value as 'gestion' | 'signataire' | 'teleprospecteur' });
+                    setBrochureFile(null);
+                  }}
                   className="w-full px-4 py-2 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
                 >
-                  <option value="collaborateur">Collaborateur</option>
-                  <option value="manager">Manager</option>
+                  <option value="gestion">Gestion</option>
+                  <option value="signataire">Signataire</option>
+                  <option value="teleprospecteur">Téléprospecteur</option>
                 </select>
               </div>
+              {formData.role === 'signataire' && (
+                <div>
+                  <label className="block text-sm font-light text-gray-700 mb-2">Plaquette signataire (PDF)</label>
+                  <div className="border border-gray-200 rounded-2xl p-4 bg-white">
+                    {!brochureFile ? (
+                      <label className="flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 rounded-xl p-4 transition-colors">
+                        <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                        <span className="text-sm font-light text-gray-600">Cliquez pour uploader un PDF</span>
+                        <span className="text-xs font-light text-gray-500 mt-1">Maximum 10MB</span>
+                        <input
+                          type="file"
+                          accept="application/pdf"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              if (file.type !== 'application/pdf') {
+                                alert('Seuls les fichiers PDF sont autorisés');
+                                return;
+                              }
+                              if (file.size > 10 * 1024 * 1024) {
+                                alert('La taille du fichier ne doit pas dépasser 10MB');
+                                return;
+                              }
+                              setBrochureFile(file);
+                            }
+                          }}
+                          className="hidden"
+                        />
+                      </label>
+                    ) : (
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <FileText className="w-5 h-5 text-blue-600" />
+                          <span className="text-sm font-light text-gray-700">{brochureFile.name}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setBrochureFile(null)}
+                          className="w-8 h-8 rounded-full bg-red-50 hover:bg-red-100 flex items-center justify-center transition-all"
+                        >
+                          <X className="w-4 h-4 text-red-600" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
               <div>
                 <label className="block text-sm font-light text-gray-700 mb-2">Listes de leads assignées</label>
                 <div className="border border-gray-200 rounded-2xl p-3 bg-white max-h-48 overflow-y-auto">
@@ -477,6 +582,13 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
                   Ajouter
                 </button>
               </div>
+              {showSuccessMessage && (
+                <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-2xl">
+                  <p className="text-sm font-light text-green-700 text-center">
+                    Les informations de connexion ont été envoyées par mail au nouvel utilisateur
+                  </p>
+                </div>
+              )}
             </form>
           </div>
         </>
@@ -540,13 +652,91 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
                 <label className="block text-sm font-light text-gray-700 mb-2">Rôle</label>
                 <select
                   value={editFormData.role}
-                  onChange={(e) => setEditFormData({ ...editFormData, role: e.target.value as 'collaborateur' | 'manager' })}
+                  onChange={(e) => {
+                    setEditFormData({ ...editFormData, role: e.target.value as 'gestion' | 'signataire' | 'teleprospecteur' });
+                    setEditBrochureFile(null);
+                  }}
                   className="w-full px-4 py-2 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
                 >
-                  <option value="collaborateur">Collaborateur</option>
-                  <option value="manager">Manager</option>
+                  <option value="gestion">Gestion</option>
+                  <option value="signataire">Signataire</option>
+                  <option value="teleprospecteur">Téléprospecteur</option>
                 </select>
               </div>
+              {editFormData.role === 'signataire' && (
+                <div>
+                  <label className="block text-sm font-light text-gray-700 mb-2">Plaquette signataire (PDF)</label>
+                  <div className="border border-gray-200 rounded-2xl p-4 bg-white space-y-3">
+                    {existingBrochureUrl && !editBrochureFile && (
+                      <div className="flex items-center justify-between p-3 bg-blue-50 rounded-xl">
+                        <div className="flex items-center gap-2">
+                          <FileText className="w-5 h-5 text-blue-600" />
+                          <span className="text-sm font-light text-gray-700">Plaquette actuelle</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <a
+                            href={getAdvisorBrochureUrl(existingBrochureUrl)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm font-light text-blue-600 hover:text-blue-700 underline"
+                          >
+                            Télécharger
+                          </a>
+                          <button
+                            type="button"
+                            onClick={() => setExistingBrochureUrl(null)}
+                            className="w-8 h-8 rounded-full bg-red-50 hover:bg-red-100 flex items-center justify-center transition-all"
+                          >
+                            <X className="w-4 h-4 text-red-600" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    {!editBrochureFile ? (
+                      <label className="flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 rounded-xl p-4 transition-colors">
+                        <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                        <span className="text-sm font-light text-gray-600">
+                          {existingBrochureUrl ? 'Remplacer le PDF' : 'Cliquez pour uploader un PDF'}
+                        </span>
+                        <span className="text-xs font-light text-gray-500 mt-1">Maximum 10MB</span>
+                        <input
+                          type="file"
+                          accept="application/pdf"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              if (file.type !== 'application/pdf') {
+                                alert('Seuls les fichiers PDF sont autorisés');
+                                return;
+                              }
+                              if (file.size > 10 * 1024 * 1024) {
+                                alert('La taille du fichier ne doit pas dépasser 10MB');
+                                return;
+                              }
+                              setEditBrochureFile(file);
+                            }
+                          }}
+                          className="hidden"
+                        />
+                      </label>
+                    ) : (
+                      <div className="flex items-center justify-between p-3 bg-green-50 rounded-xl">
+                        <div className="flex items-center gap-2">
+                          <FileText className="w-5 h-5 text-green-600" />
+                          <span className="text-sm font-light text-gray-700">{editBrochureFile.name}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setEditBrochureFile(null)}
+                          className="w-8 h-8 rounded-full bg-red-50 hover:bg-red-100 flex items-center justify-center transition-all"
+                        >
+                          <X className="w-4 h-4 text-red-600" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
               <div>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input

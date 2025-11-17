@@ -11,7 +11,8 @@ export interface User {
   email: string;
   first_name: string;
   last_name: string;
-  role: 'collaborateur' | 'manager';
+  role: 'admin' | 'manager' | 'gestion' | 'signataire' | 'teleprospecteur';
+  advisor_brochure_url?: string;
   is_active: boolean;
   created_at: string;
   updated_at: string;
