@@ -35,6 +35,7 @@ export async function getMemosByUser(userId: string): Promise<Memo[]> {
     .from('memos')
     .select('*')
     .eq('user_id', userId)
+    .eq('status', 'pending')
     .order('due_date', { ascending: true })
     .order('due_time', { ascending: true });
 
@@ -76,6 +77,14 @@ export async function updateMemoStatus(memoId: string, status: 'pending' | 'comp
   if (error) {
     throw new Error(`Erreur lors de la mise à jour du statut du mémo: ${error.message}`);
   }
+}
+
+export async function completeMemo(memoId: string): Promise<void> {
+  return updateMemoStatus(memoId, 'completed');
+}
+
+export async function restoreMemo(memoId: string): Promise<void> {
+  return updateMemoStatus(memoId, 'pending');
 }
 
 export async function deleteMemo(memoId: string): Promise<void> {

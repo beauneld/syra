@@ -1,8 +1,9 @@
-import { Users, Phone, Calendar, FileCheck, Search, Filter, MoreHorizontal, Bell, Euro, TrendingUp, Clock, RefreshCw, X, StickyNote, CheckSquare, BarChart3, Upload, FileText, Plus } from 'lucide-react';
+import { Phone, FileCheck, Bell, Euro, Clock, RefreshCw, X, StickyNote, CheckSquare, Plus } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { Lead, Contract, Memo } from '../types';
-import { getMemosByUser, createMemo, deleteMemo } from '../services/memosService';
+import { Lead, Contract } from '../types';
+import { getMemosByUser, createMemo, completeMemo, restoreMemo } from '../services/memosService';
 import { getActiveProfile } from '../services/profileService';
+import Toast from './Toast';
 
 const mockLeads: Lead[] = [
   {
@@ -103,7 +104,7 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
   const [volumePeriod, setVolumePeriod] = useState<'week' | 'month'>('week');
   const [leadsChartPeriod, setLeadsChartPeriod] = useState<'week' | 'month'>('week');
   const [fadingMemos, setFadingMemos] = useState<Set<string>>(new Set());
-  const [visibleMemos, setVisibleMemos] = useState<Set<string>>(new Set());
+  const [processingMemos, setProcessingMemos] = useState<Set<string>>(new Set());
   const [showAddMemoForm, setShowAddMemoForm] = useState(false);
   const [newMemoTitle, setNewMemoTitle] = useState('');
   const [newMemoDate, setNewMemoDate] = useState('');
@@ -112,6 +113,8 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
   const [memos, setMemos] = useState<DisplayMemo[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [showToast, setShowToast] = useState(false);
+  const [lastCompletedMemo, setLastCompletedMemo] = useState<DisplayMemo | null>(null);
 
   const mockContracts: Contract[] = [
     {
@@ -256,7 +259,6 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
       }));
 
       setMemos(displayMemos);
-      setVisibleMemos(new Set(displayMemos.map(m => m.id)));
     } catch (error) {
       console.error('Erreur lors du chargement des mémos:', error);
     } finally {
@@ -266,42 +268,79 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
 
   const formatDate = (dateStr: string): string => {
     const date = new Date(dateStr);
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    if (date.toDateString() === today.toDateString()) {
-      return "Aujourd'hui";
-    } else if (date.toDateString() === tomorrow.toDateString()) {
-      return 'Demain';
-    } else {
-      return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
-    }
+    return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
   };
 
   const nextMemo = memos[0];
 
-  const handleMemoClick = async (memoId: string) => {
-    setFadingMemos(prev => new Set(prev).add(memoId));
-    setTimeout(async () => {
-      try {
-        await deleteMemo(memoId);
-        setVisibleMemos(prev => {
-          const newSet = new Set(prev);
-          newSet.delete(memoId);
-          return newSet;
-        });
-        setMemos(prev => prev.filter(m => m.id !== memoId));
-      } catch (error) {
-        console.error('Erreur lors de la suppression du mémo:', error);
-      } finally {
+  const handleCheckboxChange = async (memo: DisplayMemo, isChecked: boolean) => {
+    if (!isChecked || processingMemos.has(memo.id)) return;
+
+    setProcessingMemos(prev => new Set(prev).add(memo.id));
+    setFadingMemos(prev => new Set(prev).add(memo.id));
+
+    try {
+      await completeMemo(memo.id);
+
+      setLastCompletedMemo(memo);
+      setShowToast(true);
+
+      setTimeout(() => {
+        setMemos(prev => prev.filter(m => m.id !== memo.id));
         setFadingMemos(prev => {
           const newSet = new Set(prev);
-          newSet.delete(memoId);
+          newSet.delete(memo.id);
           return newSet;
         });
-      }
-    }, 400);
+        setProcessingMemos(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(memo.id);
+          return newSet;
+        });
+      }, 400);
+    } catch (error) {
+      console.error('Erreur lors de la complétion du mémo:', error);
+      setFadingMemos(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(memo.id);
+        return newSet;
+      });
+      setProcessingMemos(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(memo.id);
+        return newSet;
+      });
+      alert('Erreur lors de la complétion du mémo. Veuillez réessayer.');
+    }
+  };
+
+  const handleUndoComplete = async () => {
+    if (!lastCompletedMemo) return;
+
+    try {
+      await restoreMemo(lastCompletedMemo.id);
+
+      setMemos(prev => {
+        const newMemos = [...prev, lastCompletedMemo];
+        return newMemos.sort((a, b) => {
+          const dateCompare = new Date(a.date.split('/').reverse().join('-')).getTime() -
+                              new Date(b.date.split('/').reverse().join('-')).getTime();
+          if (dateCompare !== 0) return dateCompare;
+          return a.time.localeCompare(b.time);
+        });
+      });
+
+      setShowToast(false);
+      setLastCompletedMemo(null);
+    } catch (error) {
+      console.error('Erreur lors de la restauration du mémo:', error);
+      alert('Erreur lors de la restauration du mémo.');
+    }
+  };
+
+  const handleCloseToast = () => {
+    setShowToast(false);
+    setLastCompletedMemo(null);
   };
 
   const handleAddMemo = async () => {
@@ -335,7 +374,6 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
       };
 
       setMemos(prev => [displayMemo, ...prev]);
-      setVisibleMemos(prev => new Set([...Array.from(prev), displayMemo.id]));
 
       setNewMemoTitle('');
       setNewMemoDate('');
@@ -407,7 +445,7 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
                 <div className="flex items-baseline gap-2">
                   <p className="text-xl font-light text-gray-900">{memos.length}</p>
                   <span className="text-xs font-light px-2 py-1 rounded-full bg-red-200/50 text-red-700 border border-red-300/30">
-                    {memos.filter(m => visibleMemos.has(m.id)).length} actifs
+                    {memos.length} actifs
                   </span>
                 </div>
               </div>
@@ -710,37 +748,50 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
                 </div>
               )}
 
-              <div className="space-y-3">
-                {memos.filter(memo => visibleMemos.has(memo.id)).map((memo) => (
-                  <div
-                    key={memo.id}
-                    onClick={() => handleMemoClick(memo.id)}
-                    className={`p-4 rounded-xl border cursor-pointer hover:shadow-md transition-all duration-400 ${
-                      fadingMemos.has(memo.id) ? 'opacity-0' : 'opacity-100'
-                    } ${
-                    memo.color === 'blue' ? 'bg-gradient-to-r from-blue-50 to-blue-100/30 border-blue-200/50' :
-                    memo.color === 'violet' ? 'bg-gradient-to-r from-violet-50 to-violet-100/30 border-violet-200/50' :
-                    memo.color === 'orange' ? 'bg-gradient-to-r from-orange-50 to-orange-100/30 border-orange-200/50' :
-                    memo.color === 'green' ? 'bg-gradient-to-r from-green-50 to-green-100/30 border-green-200/50' :
-                    'bg-gradient-to-r from-amber-50 to-amber-100/30 border-amber-200/50'
-                  }`}>
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start gap-3 flex-1">
-                        <input type="checkbox" className={`mt-1 w-4 h-4 rounded focus:ring-${memo.color}-500 text-${memo.color}-600`} />
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-900">{memo.title}</p>
-                          {memo.description && (
-                            <p className="text-sm text-gray-600 font-light mt-1.5 line-clamp-2">{memo.description}</p>
-                          )}
-                          <div className="flex items-center gap-3 mt-2">
-                            <span className="text-xs text-gray-600 font-light">{memo.date} - {memo.time}</span>
+              {memos.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                    <StickyNote className="w-8 h-8 text-gray-400" />
+                  </div>
+                  <p className="text-sm text-gray-600 font-light">Aucun mémo actif</p>
+                  <p className="text-xs text-gray-500 font-light mt-1">Ajoutez un mémo pour commencer</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {memos.map((memo) => (
+                    <div
+                      key={memo.id}
+                      className={`p-4 rounded-2xl border bg-white/80 backdrop-blur-sm shadow-sm transition-all duration-400 ${
+                        fadingMemos.has(memo.id) ? 'opacity-0' : 'opacity-100'
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <input
+                          type="checkbox"
+                          checked={false}
+                          onChange={(e) => handleCheckboxChange(memo, e.target.checked)}
+                          disabled={processingMemos.has(memo.id)}
+                          className="mt-1 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-400/50 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex-1">
+                              <p className="text-sm font-semibold text-gray-900">{memo.title}</p>
+                              {memo.description && (
+                                <p className="text-sm text-gray-600 font-light mt-1.5">{memo.description}</p>
+                              )}
+                            </div>
+                            <div className="text-right flex-shrink-0">
+                              <p className="text-xs text-gray-500 font-light">{memo.date}</p>
+                              <p className="text-xs text-gray-500 font-light">{memo.time}</p>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -980,6 +1031,13 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
             </div>
           </div>
         )}
+
+        <Toast
+          message="Mémo complété"
+          isVisible={showToast}
+          onUndo={handleUndoComplete}
+          onClose={handleCloseToast}
+        />
       </div>
     </div>
   );
