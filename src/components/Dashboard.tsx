@@ -620,7 +620,7 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
                       <div className="w-1/2 flex flex-col items-center justify-end">
                         <span className="text-[10px] text-blue-600 font-medium mb-1">{data.leads}</span>
                         <div
-                          className="w-full bg-gradient-to-t from-blue-400 to-blue-300 rounded-t-lg transition-all hover:from-blue-500 hover:to-blue-400 cursor-pointer shadow-sm"
+                          className="w-full bg-gradient-to-t from-blue-400 to-blue-300 rounded-t-lg transition-all duration-500 ease-out hover:from-blue-500 hover:to-blue-400 cursor-pointer shadow-sm"
                           style={{ height: `${(data.leads / maxLeadsValueForScale) * 100}%`, minHeight: '15px' }}
                           title={`${data.leads} leads`}
                         />
@@ -628,7 +628,7 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
                       <div className="w-1/2 flex flex-col items-center justify-end">
                         <span className="text-[10px] text-violet-600 font-medium mb-1">{data.converted}</span>
                         <div
-                          className="w-full bg-gradient-to-t from-violet-400 to-violet-300 rounded-t-lg transition-all hover:from-violet-500 hover:to-violet-400 cursor-pointer shadow-sm"
+                          className="w-full bg-gradient-to-t from-violet-400 to-violet-300 rounded-t-lg transition-all duration-500 ease-out hover:from-violet-500 hover:to-violet-400 cursor-pointer shadow-sm"
                           style={{ height: `${(data.converted / maxLeadsValueForScale) * 100}%`, minHeight: '10px' }}
                           title={`${data.converted} convertis`}
                         />
