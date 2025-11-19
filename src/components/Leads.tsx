@@ -424,10 +424,10 @@ function LeadCard({ lead, onUpdate, showOwner }: { lead: Lead; onUpdate: (leadId
           </div>
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <button onClick={() => setShowAppointmentModal(true)} className="w-9 h-9 rounded-full bg-white/80 hover:bg-white flex items-center justify-center transition-all hover:scale-105 shadow-sm">
-              <CalendarDays className="w-4 h-4 text-gray-600" />
+              <CalendarDays className="w-4 h-4 text-gray-600 dark:text-[#101828]" />
             </button>
             <button onClick={() => setShowReminderModal(true)} className="w-9 h-9 rounded-full bg-white/80 hover:bg-white flex items-center justify-center transition-all hover:scale-105 shadow-sm">
-              <BellRing className="w-4 h-4 text-gray-600" />
+              <BellRing className="w-4 h-4 text-gray-600 dark:text-[#101828]" />
             </button>
           </div>
         </div>
@@ -708,26 +708,26 @@ export default function Leads({ onNotificationClick, notificationCount, initialF
               className={`w-9 h-9 rounded-full ${leadViewMode === 'conseiller' ? 'bg-white shadow-md' : 'bg-white/80 hover:bg-white shadow-sm'} flex items-center justify-center transition-all hover:scale-105 flex-shrink-0 hidden md:flex`}
               title="Vue Conseillère"
             >
-              <User className="w-5 h-5 text-gray-600" />
+              <User className="w-5 h-5 text-gray-600 dark:text-[#101828]" />
             </button>
             <button
               onClick={() => setLeadViewMode('manager')}
               className={`w-9 h-9 rounded-full ${leadViewMode === 'manager' ? 'bg-white shadow-md' : 'bg-white/80 hover:bg-white shadow-sm'} flex items-center justify-center transition-all hover:scale-105 flex-shrink-0 hidden md:flex`}
               title="Vue Manager"
             >
-              <Users className="w-5 h-5 text-gray-600" />
+              <Users className="w-5 h-5 text-gray-600 dark:text-[#101828]" />
             </button>
             <button
               className={`w-9 h-9 rounded-full ${viewMode === 'table' ? 'bg-white shadow-md' : 'bg-white/80 hover:bg-white shadow-sm'} flex items-center justify-center transition-all hover:scale-105 flex-shrink-0`}
               onClick={() => setViewMode('table')}
             >
-              <List className="w-5 h-5 text-gray-600" />
+              <List className="w-5 h-5 text-gray-600 dark:text-[#101828]" />
             </button>
             <button
               className={`w-9 h-9 rounded-full ${viewMode === 'cards' ? 'bg-white shadow-md' : 'bg-white/80 hover:bg-white shadow-sm'} flex items-center justify-center transition-all hover:scale-105 flex-shrink-0`}
               onClick={() => setViewMode('cards')}
             >
-              <LayoutGrid className="w-5 h-5 text-gray-600" />
+              <LayoutGrid className="w-5 h-5 text-gray-600 dark:text-[#101828]" />
             </button>
 
             <button

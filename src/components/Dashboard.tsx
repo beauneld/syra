@@ -1,4 +1,4 @@
-import { Phone, FileCheck, Bell, Euro, Clock, RefreshCw, X, StickyNote, CheckSquare, Plus } from 'lucide-react';
+import { Phone, FileCheck, Bell, Euro, Clock, RefreshCw, X, StickyNote, CheckSquare, Plus, FileText, Upload } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Lead, Contract } from '../types';
 import { getMemosByUser, createMemo, completeMemo, restoreMemo } from '../services/memosService';
@@ -461,7 +461,7 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
                   className={`px-3 py-1.5 text-xs font-light rounded-full transition-all ${
                     volumePeriod === 'week'
                       ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md'
-                      : 'bg-white/80 text-gray-600 hover:bg-white'
+                      : 'bg-white/80 dark:bg-white/90 text-[#101828] dark:text-[#101828]'
                   }`}
                 >
                   4 dernières semaines
@@ -471,7 +471,7 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
                   className={`px-3 py-1.5 text-xs font-light rounded-full transition-all ${
                     volumePeriod === 'month'
                       ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md'
-                      : 'bg-white/80 text-gray-600 hover:bg-white'
+                      : 'bg-white/80 dark:bg-white/90 text-[#101828] dark:text-[#101828]'
                   }`}
                 >
                   12 mois
@@ -594,7 +594,7 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
                   className={`px-3 py-1.5 text-xs font-light rounded-full transition-all ${
                     leadsChartPeriod === 'week'
                       ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md'
-                      : 'bg-white/80 text-gray-600 hover:bg-white'
+                      : 'bg-white/80 dark:bg-white/90 text-[#101828] dark:text-[#101828]'
                   }`}
                 >
                   Jour
@@ -604,7 +604,7 @@ export default function Dashboard({ onNotificationClick, notificationCount, onNa
                   className={`px-3 py-1.5 text-xs font-light rounded-full transition-all ${
                     leadsChartPeriod === 'month'
                       ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md'
-                      : 'bg-white/80 text-gray-600 hover:bg-white'
+                      : 'bg-white/80 dark:bg-white/90 text-[#101828] dark:text-[#101828]'
                   }`}
                 >
                   Semaine
