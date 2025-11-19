@@ -177,17 +177,17 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
     <>
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998]" onClick={onClose} />
       <div className="fixed inset-0 flex items-center justify-center z-[9999] p-4 overflow-y-auto pointer-events-none">
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-xl my-4 pointer-events-auto max-h-[85vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+        <div className="bg-white dark:bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-xl my-4 pointer-events-auto max-h-[85vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
           {/* Header */}
-          <div className="p-6 border-b border-gray-200/30 flex items-center justify-between sticky top-0 bg-white rounded-t-3xl z-10">
-            <h2 className="text-xl font-light text-gray-900">
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700/30 flex items-center justify-between sticky top-0 bg-white dark:bg-gray-900 rounded-t-3xl z-10">
+            <h2 className="text-xl font-light text-gray-900 dark:text-gray-100">
               {editContract ? 'Éditer le contrat' : 'Ajouter un nouveau contrat'}
             </h2>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all"
+              className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-all"
             >
-              <X className="w-4 h-4 text-gray-600" />
+              <X className="w-4 h-4 text-gray-600 dark:text-gray-400" />
             </button>
           </div>
 
@@ -196,11 +196,11 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
             <div className="space-y-6">
               {/* Section Général */}
               <div>
-                <h3 className="text-lg font-light text-gray-900 mb-4 pb-2 border-b border-gray-200">Informations générales</h3>
+                <h3 className="text-lg font-light text-gray-900 dark:text-gray-100 mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">Informations générales</h3>
                 <div className="grid grid-cols-2 gap-6">
                   {/* Nom de l'assureur */}
                   <div>
-                    <label className="block text-sm font-light text-gray-700 mb-2">
+                    <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                       <span className="text-red-500">*</span> Nom de l'assureur
                     </label>
                     <div className="relative">
@@ -212,11 +212,11 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                           handleAssureurChange(e.target.value);
                         }}
                         onFocus={() => setSearchAssureur(formData.assureur)}
-                        className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                        className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                         placeholder="Rechercher un assureur..."
                       />
                       {searchAssureur && (
-                        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-lg border border-gray-200/50 max-h-60 overflow-y-auto z-20">
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700/50 max-h-60 overflow-y-auto z-20">
                           {filteredAssureurs.map((assureur) => (
                             <button
                               key={assureur}
@@ -225,7 +225,7 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                                 handleAssureurChange(assureur);
                                 setSearchAssureur('');
                               }}
-                              className="w-full px-4 py-3 text-left text-sm font-light text-gray-700 hover:bg-gray-50 transition-colors first:rounded-t-2xl last:rounded-b-2xl"
+                              className="w-full px-4 py-3 text-left text-sm font-light text-gray-700 dark:text-gray-300 hover:bg-gray-50 transition-colors first:rounded-t-2xl last:rounded-b-2xl"
                             >
                               {assureur}
                             </button>
@@ -237,7 +237,7 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
 
                   {/* Gamme de contrat (now using produit field) */}
                   <div>
-                    <label className="block text-sm font-light text-gray-700 mb-2">
+                    <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                       <span className="text-red-500">*</span> Gamme de contrat
                     </label>
                     {formData.assureur && availableProducts.length > 0 ? (
@@ -245,7 +245,7 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                         <select
                           value={formData.produit}
                           onChange={(e) => handleProductChange(e.target.value)}
-                          className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                          className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                         >
                           <option value="">Sélectionner...</option>
                           {availableProducts.map((product) => (
@@ -255,7 +255,7 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                           ))}
                         </select>
                         {selectedProduct && (
-                          <p className="mt-2 text-xs text-gray-500">
+                          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                             Rémunération: {selectedProduct.remuneration}
                           </p>
                         )}
@@ -263,7 +263,7 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                     ) : (
                       <select
                         disabled
-                        className="w-full px-4 py-2.5 bg-gray-100/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                        className="w-full px-4 py-2.5 bg-gray-100 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                       >
                         <option value="">Sélectionner d'abord un assureur...</option>
                       </select>
@@ -278,9 +278,9 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                       type="checkbox"
                       checked={formData.en_portefeuille}
                       onChange={(e) => setFormData({ ...formData, en_portefeuille: e.target.checked })}
-                      className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                      className="w-4 h-4 text-blue-600 dark:text-blue-400 rounded border-gray-300 focus:ring-blue-500"
                     />
-                    <span className="text-sm font-light text-gray-700">En portefeuille</span>
+                    <span className="text-sm font-light text-gray-700 dark:text-gray-300">En portefeuille</span>
                   </label>
 
                   <label className="flex items-center gap-2 cursor-pointer">
@@ -288,9 +288,9 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                       type="checkbox"
                       checked={formData.loi_madelin}
                       onChange={(e) => setFormData({ ...formData, loi_madelin: e.target.checked })}
-                      className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                      className="w-4 h-4 text-blue-600 dark:text-blue-400 rounded border-gray-300 focus:ring-blue-500"
                     />
-                    <span className="text-sm font-light text-gray-700">Loi Madelin</span>
+                    <span className="text-sm font-light text-gray-700 dark:text-gray-300">Loi Madelin</span>
                   </label>
 
                   <label className="flex items-center gap-2 cursor-pointer">
@@ -298,16 +298,16 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                       type="checkbox"
                       checked={formData.contrat_principal}
                       onChange={(e) => setFormData({ ...formData, contrat_principal: e.target.checked })}
-                      className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                      className="w-4 h-4 text-blue-600 dark:text-blue-400 rounded border-gray-300 focus:ring-blue-500"
                     />
-                    <span className="text-sm font-light text-gray-700">Contrat principal</span>
+                    <span className="text-sm font-light text-gray-700 dark:text-gray-300">Contrat principal</span>
                   </label>
                 </div>
 
                 {/* Assureurs interrogés - Always visible after product selection */}
                 {formData.produit && (
-                  <div className="p-4 bg-blue-50/50 rounded-2xl border border-blue-200/50 mt-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20/50 rounded-2xl border border-blue-200 dark:border-blue-700/50 mt-6">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Assureurs interrogés pour comparaison
                     </label>
                     <div className="flex flex-wrap gap-2">
@@ -315,18 +315,18 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                         assureursInterroges.map((assureur, index) => (
                           <span
                             key={index}
-                            className="px-3 py-1.5 bg-white border border-blue-200 text-blue-700 rounded-full text-xs font-light"
+                            className="px-3 py-1.5 bg-white dark:bg-gray-900 border border-blue-200 dark:border-blue-700 text-blue-700 rounded-full text-xs font-light"
                           >
                             {assureur}
                           </span>
                         ))
                       ) : (
-                        <span className="px-3 py-1.5 bg-white border border-blue-200 text-blue-700 rounded-full text-xs font-light">
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-900 border border-blue-200 dark:border-blue-700 text-blue-700 rounded-full text-xs font-light">
                           {formData.assureur}
                         </span>
                       )}
                     </div>
-                    <p className="mt-2 text-xs text-gray-500">
+                    <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                       Ces assureurs ont été consultés pour comparer les offres disponibles
                     </p>
                   </div>
@@ -335,44 +335,44 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
 
               {/* Section Dates */}
               <div>
-                <h3 className="text-lg font-light text-gray-900 mb-4 pb-2 border-b border-gray-200">Dates</h3>
+                <h3 className="text-lg font-light text-gray-900 dark:text-gray-100 mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">Dates</h3>
                 <div className="grid grid-cols-3 gap-6">
                 {/* Date de souscription */}
                 <div>
-                  <label className="block text-sm font-light text-gray-700 mb-2">
+                  <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                     Date de souscription
                   </label>
                   <input
                     type="date"
                     value={formData.date_souscription}
                     onChange={(e) => setFormData({ ...formData, date_souscription: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                   />
                 </div>
 
                 {/* Date d'effet */}
                 <div>
-                  <label className="block text-sm font-light text-gray-700 mb-2">
+                  <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                     Date d'effet
                   </label>
                   <input
                     type="date"
                     value={formData.date_effet}
                     onChange={(e) => setFormData({ ...formData, date_effet: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                   />
                 </div>
 
                 {/* Date d'échéance */}
                 <div>
-                  <label className="block text-sm font-light text-gray-700 mb-2">
+                  <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                     Date d'échéance
                   </label>
                   <input
                     type="date"
                     value={formData.date_echeance}
                     onChange={(e) => setFormData({ ...formData, date_echeance: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -380,34 +380,34 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
 
               {/* Section Financier */}
               <div>
-                <h3 className="text-lg font-light text-gray-900 mb-4 pb-2 border-b border-gray-200">Informations financières</h3>
+                <h3 className="text-lg font-light text-gray-900 dark:text-gray-100 mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">Informations financières</h3>
                 <div className="space-y-6">
                   {/* Standard fields - always visible */}
                   <div className="grid grid-cols-2 gap-6">
                     {/* Montant initial */}
                     <div>
-                      <label className="block text-sm font-light text-gray-700 mb-2">
+                      <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                         Montant initial (€)
                       </label>
                       <input
                         type="text"
                         value={formData.montant_initial}
                         onChange={(e) => setFormData({ ...formData, montant_initial: e.target.value })}
-                        className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                        className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                         placeholder=""
                       />
                     </div>
 
                     {/* Versement programmé */}
                     <div>
-                      <label className="block text-sm font-light text-gray-700 mb-2">
+                      <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                         Versement programmé (€)
                       </label>
                       <input
                         type="text"
                         value={formData.versement_programme}
                         onChange={(e) => setFormData({ ...formData, versement_programme: e.target.value })}
-                        className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                        className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                         placeholder=""
                       />
                     </div>
@@ -415,13 +415,13 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
 
                   {/* Périodicité */}
                   <div>
-                    <label className="block text-sm font-light text-gray-700 mb-2">
+                    <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                       Périodicité
                     </label>
                     <select
                       value={formData.periodicite}
                       onChange={(e) => setFormData({ ...formData, periodicite: e.target.value })}
-                      className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                      className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                     >
                       <option value="">Sélectionner...</option>
                       <option value="Mensuel">Mensuel</option>
@@ -433,8 +433,8 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
 
                   {/* Dynamic fields based on selected product */}
                   {selectedProduct && selectedProduct.fields && selectedProduct.fields.length > 0 && (
-                    <div className="space-y-6 p-4 bg-blue-50/30 rounded-2xl border border-blue-200/30">
-                      <h4 className="text-sm font-medium text-gray-900">Champs spécifiques au produit</h4>
+                    <div className="space-y-6 p-4 bg-blue-50 dark:bg-blue-900/20/30 rounded-2xl border border-blue-200 dark:border-blue-700/30">
+                      <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">Champs spécifiques au produit</h4>
 
                       <div className="grid grid-cols-2 gap-6">
                         {selectedProduct.fields.map((field) => {
@@ -442,7 +442,7 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                             case 'versement_initial':
                               return (
                                 <div key={field.type}>
-                                  <label className="block text-sm font-light text-gray-700 mb-2">
+                                  <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                                     {field.required && <span className="text-red-500">* </span>}
                                     {field.label}
                                   </label>
@@ -450,10 +450,10 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                                     type="text"
                                     value={formData.versement_initial}
                                     onChange={(e) => setFormData({ ...formData, versement_initial: e.target.value })}
-                                    className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                                     placeholder=""
                                   />
-                                  {field.note && <p className="mt-1 text-xs text-gray-500">{field.note}</p>}
+                                  {field.note && <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{field.note}</p>}
                                 </div>
                               );
 
@@ -465,9 +465,9 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                                       type="checkbox"
                                       checked={formData.mma_elite}
                                       onChange={(e) => setFormData({ ...formData, mma_elite: e.target.checked })}
-                                      className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                                      className="w-4 h-4 text-blue-600 dark:text-blue-400 rounded border-gray-300 focus:ring-blue-500"
                                     />
-                                    <span className="text-sm font-light text-gray-700">{field.label}</span>
+                                    <span className="text-sm font-light text-gray-700 dark:text-gray-300">{field.label}</span>
                                   </label>
                                 </div>
                               );
@@ -475,14 +475,14 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                             case 'frais_versement':
                               return (
                                 <div key={field.type}>
-                                  <label className="block text-sm font-light text-gray-700 mb-2">
+                                  <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                                     {field.label}
                                   </label>
                                   <input
                                     type="text"
                                     value={formData.frais_versement}
                                     onChange={(e) => setFormData({ ...formData, frais_versement: e.target.value })}
-                                    className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                                     placeholder="%"
                                   />
                                 </div>
@@ -491,14 +491,14 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                             case 'vp_optionnel':
                               return (
                                 <div key={field.type}>
-                                  <label className="block text-sm font-light text-gray-700 mb-2">
+                                  <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                                     {field.label}
                                   </label>
                                   <input
                                     type="text"
                                     value={formData.vp_optionnel}
                                     onChange={(e) => setFormData({ ...formData, vp_optionnel: e.target.value })}
-                                    className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                                     placeholder=""
                                   />
                                 </div>
@@ -507,14 +507,14 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                             case 'frais_a_definir':
                               return (
                                 <div key={field.type}>
-                                  <label className="block text-sm font-light text-gray-700 mb-2">
+                                  <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                                     {field.label}
                                   </label>
                                   <input
                                     type="text"
                                     value={formData.frais_a_definir}
                                     onChange={(e) => setFormData({ ...formData, frais_a_definir: e.target.value })}
-                                    className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                                     placeholder=""
                                   />
                                 </div>
@@ -523,14 +523,14 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                             case 'date_effet_supplementaire':
                               return (
                                 <div key={field.type}>
-                                  <label className="block text-sm font-light text-gray-700 mb-2">
+                                  <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                                     {field.label}
                                   </label>
                                   <input
                                     type="date"
                                     value={formData.date_effet_supplementaire}
                                     onChange={(e) => setFormData({ ...formData, date_effet_supplementaire: e.target.value })}
-                                    className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                                   />
                                 </div>
                               );
@@ -538,14 +538,14 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                             case 'frais_chacun':
                               return (
                                 <div key={field.type}>
-                                  <label className="block text-sm font-light text-gray-700 mb-2">
+                                  <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                                     {field.label}
                                   </label>
                                   <input
                                     type="text"
                                     value={formData.frais_chacun}
                                     onChange={(e) => setFormData({ ...formData, frais_chacun: e.target.value })}
-                                    className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                                     placeholder="%"
                                   />
                                 </div>
@@ -562,14 +562,14 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                   {/* Legacy fields - Champs Assurance emprunteur */}
                   {formData.gamme_contrat === 'Assurance emprunteur' && !selectedProduct && (
                     <div>
-                      <label className="block text-sm font-light text-gray-700 mb-2">
+                      <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                         Frais de dossier (€)
                       </label>
                       <input
                         type="text"
                         value={formData.frais_dossier}
                         onChange={(e) => setFormData({ ...formData, frais_dossier: e.target.value })}
-                        className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+                        className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                         placeholder="Montant des frais de dossier"
                       />
                     </div>
@@ -580,16 +580,16 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
 
               {/* Section Commentaires - Moved to the end */}
               <div>
-                <h3 className="text-lg font-light text-gray-900 mb-4 pb-2 border-b border-gray-200">Commentaires</h3>
+                <h3 className="text-lg font-light text-gray-900 dark:text-gray-100 mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">Commentaires</h3>
                 <div>
-                  <label className="block text-sm font-light text-gray-700 mb-2">
+                  <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
                     Commentaires
                   </label>
                   <textarea
                     value={formData.commentaires}
                     onChange={(e) => setFormData({ ...formData, commentaires: e.target.value })}
                     rows={4}
-                    className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-none"
+                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-none"
                     placeholder=""
                   />
                 </div>
@@ -598,10 +598,10 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
           </div>
 
           {/* Footer */}
-          <div className="p-6 border-t border-gray-200/30 bg-white flex justify-center rounded-b-3xl flex-shrink-0">
+          <div className="p-6 border-t border-gray-200 dark:border-gray-700/30 bg-white dark:bg-gray-900 flex justify-center rounded-b-3xl flex-shrink-0">
             <button
               onClick={handleSave}
-              className="px-8 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all hover:scale-105"
+              className="px-8 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm text-gray-900 dark:text-gray-100 font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all hover:scale-105"
             >
               Ajouter et fermer
             </button>

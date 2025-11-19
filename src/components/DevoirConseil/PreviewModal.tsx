@@ -20,21 +20,21 @@ export default function PreviewModal({
     <>
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998]" onClick={onClose} />
       <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 overflow-y-auto pointer-events-none">
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-5xl my-4 flex flex-col border border-gray-200/50 pointer-events-auto max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
-          <div className="p-6 border-b border-gray-200/30 flex items-center justify-between flex-shrink-0">
-            <h2 className="text-xl font-light text-gray-900">Prévisualisation - Devoir de Conseil</h2>
+        <div className="bg-white dark:bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-5xl my-4 flex flex-col border border-gray-200 dark:border-gray-700/50 pointer-events-auto max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700/30 flex items-center justify-between flex-shrink-0">
+            <h2 className="text-xl font-light text-gray-900 dark:text-gray-100">Prévisualisation - Devoir de Conseil</h2>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all"
+              className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-all"
             >
-              <X className="w-4 h-4 text-gray-600" />
+              <X className="w-4 h-4 text-gray-600 dark:text-gray-400" />
             </button>
           </div>
 
           <div className="flex-1 overflow-y-auto p-8">
             <div className="max-w-4xl mx-auto space-y-6">
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">1. Informations</h3>
+              <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-gray-100">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">1. Informations</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div><span className="font-medium">Civilité:</span> {formData.civilite || '-'}</div>
                   <div><span className="font-medium">Nom:</span> {formData.nom || '-'}</div>
@@ -60,7 +60,7 @@ export default function PreviewModal({
                   {formData.commentaire && (
                     <div className="col-span-2">
                       <span className="font-medium">Commentaire:</span>
-                      <div className="mt-2 p-3 bg-gray-50 rounded-lg text-sm text-gray-700 whitespace-pre-wrap">{formData.commentaire}</div>
+                      <div className="mt-2 p-3 bg-gray-50 rounded-lg text-sm text-gray-900 dark:text-gray-100 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{formData.commentaire}</div>
                     </div>
                   )}
                   {formData.apporteur_affaires && (
@@ -69,19 +69,19 @@ export default function PreviewModal({
                   {formData.commentaires_internes && (
                     <div className="col-span-2">
                       <span className="font-medium">Commentaires internes:</span>
-                      <div className="mt-2 p-3 bg-gray-50 rounded-lg text-sm text-gray-700 whitespace-pre-wrap">{formData.commentaires_internes}</div>
+                      <div className="mt-2 p-3 bg-gray-50 rounded-lg text-sm text-gray-900 dark:text-gray-100 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{formData.commentaires_internes}</div>
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">2. Analyse des propositions</h3>
+              <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-gray-100">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">2. Analyse des propositions</h3>
                 {propositions.map((prop, index) => (
                   <div key={index} className="mb-2 p-3 bg-gray-50 rounded-lg">
                     <span className="font-medium">{prop}</span>
                     {propositionDates[prop] && (
-                      <span className="text-sm text-gray-600 ml-2">
+                      <span className="text-sm text-gray-600 dark:text-gray-400 ml-2">
                         - Date d'effet: {new Date(propositionDates[prop]).toLocaleDateString('fr-FR')}
                       </span>
                     )}
@@ -89,18 +89,18 @@ export default function PreviewModal({
                 ))}
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">3. Les Contrats</h3>
+              <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-gray-100">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">3. Les Contrats</h3>
                 {contracts.map((contract, index) => (
-                  <div key={index} className="mb-4 p-4 bg-blue-50 rounded-lg">
-                    <div className="font-medium text-gray-900">{contract.gamme_contrat}</div>
-                    <div className="text-sm text-gray-600">Assureur: {contract.assureur}</div>
+                  <div key={index} className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <div className="font-medium text-gray-900 dark:text-gray-100">{contract.gamme_contrat}</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Assureur: {contract.assureur}</div>
                   </div>
                 ))}
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">4. Préconisation et conseils</h3>
+              <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-gray-100">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">4. Préconisation et conseils</h3>
                 <div className="space-y-3">
                   <h4 className="font-medium text-gray-800">Assureurs interrogés</h4>
                   {contracts.map((contract, index) => (
@@ -118,8 +118,8 @@ export default function PreviewModal({
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 border border-gray-100">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Texte de signature électronique</h3>
+              <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-100">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Texte de signature électronique</h3>
                 <SignatureText formData={formData} contracts={contracts} />
               </div>
             </div>

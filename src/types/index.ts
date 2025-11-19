@@ -194,4 +194,5 @@ export interface ProfilePermissions {
   canViewAllLeads: boolean;
   canTransferLeads: boolean;
   canDeleteLeads: boolean;
+  canManagePartners: boolean;
 }

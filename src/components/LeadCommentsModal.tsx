@@ -143,21 +143,21 @@ export default function LeadCommentsModal({ leadId, leadName, onClose }: LeadCom
     <>
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[109]" onClick={onClose} />
       <div className="fixed inset-0 flex items-center justify-center z-[110] p-4 overflow-y-auto pointer-events-none">
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-3xl my-4 flex flex-col pointer-events-auto" onClick={(e) => e.stopPropagation()}>
-          <div className="p-6 border-b border-gray-200/30 flex items-center justify-between flex-shrink-0">
+        <div className="bg-white dark:bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-3xl my-4 flex flex-col pointer-events-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700/30 flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-3">
-              <MessageSquare className="w-6 h-6 text-blue-600" />
+              <MessageSquare className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               <div>
-                <h2 className="text-xl font-light text-gray-900">Commentaires</h2>
-                <p className="text-sm text-gray-500 font-light">{leadName}</p>
+                <h2 className="text-xl font-light text-gray-900 dark:text-gray-100">Commentaires</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400 font-light">{leadName}</p>
               </div>
             </div>
             <button
               onClick={onClose}
               aria-label="Fermer la fenêtre"
-              className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all"
+              className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-all"
             >
-              <X className="w-4 h-4 text-gray-600" />
+              <X className="w-4 h-4 text-gray-600 dark:text-gray-400" />
             </button>
           </div>
 
@@ -165,18 +165,18 @@ export default function LeadCommentsModal({ leadId, leadName, onClose }: LeadCom
             {comments.length === 0 ? (
               <div className="text-center py-12">
                 <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500 font-light">Aucun commentaire pour le moment</p>
-                <p className="text-sm text-gray-400 font-light mt-1">Soyez le premier à commenter</p>
+                <p className="text-gray-500 dark:text-gray-400 font-light">Aucun commentaire pour le moment</p>
+                <p className="text-sm text-gray-400 dark:text-gray-400 font-light mt-1">Soyez le premier à commenter</p>
               </div>
             ) : (
               comments.map((comment) => (
-                <div key={comment.id} className="bg-gray-50 rounded-2xl p-4 hover:bg-gray-100/50 transition-all">
+                <div key={comment.id} className="bg-gray-50 rounded-2xl p-4 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-all">
                   {editingCommentId === comment.id ? (
                     <div className="space-y-3">
                       <textarea
                         value={editingContent}
                         onChange={(e) => setEditingContent(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 resize-none"
+                        className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 resize-none"
                         rows={3}
                         placeholder="Modifier le commentaire..."
                       />
@@ -184,14 +184,14 @@ export default function LeadCommentsModal({ leadId, leadName, onClose }: LeadCom
                         <button
                           onClick={cancelEditing}
                           disabled={loading}
-                          className="px-4 py-2 text-sm font-light text-gray-600 hover:text-gray-900 transition-all"
+                          className="px-4 py-2 text-sm font-light text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-gray-100 transition-all"
                         >
                           Annuler
                         </button>
                         <button
                           onClick={() => handleUpdateComment(comment.id)}
                           disabled={loading || !editingContent.trim()}
-                          className="px-4 py-2 bg-blue-500 text-white text-sm font-light rounded-full hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                          className="px-4 py-2 bg-blue-50 dark:bg-blue-900/200 text-white text-sm font-light rounded-full hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                         >
                           Enregistrer
                         </button>
@@ -205,22 +205,22 @@ export default function LeadCommentsModal({ leadId, leadName, onClose }: LeadCom
                             {comment.user_email?.charAt(0).toUpperCase() || 'U'}
                           </div>
                           <div>
-                            <p className="text-sm text-gray-900 font-light">{comment.user_email || 'Utilisateur'}</p>
-                            <p className="text-xs text-gray-400 font-light">{formatDate(comment.created_at)}</p>
+                            <p className="text-sm text-gray-900 dark:text-gray-100 font-light">{comment.user_email || 'Utilisateur'}</p>
+                            <p className="text-xs text-gray-400 dark:text-gray-400 font-light">{formatDate(comment.created_at)}</p>
                           </div>
                         </div>
                         {currentUserId === comment.user_id && (
                           <div className="flex gap-1">
                             <button
                               onClick={() => startEditing(comment)}
-                              className="w-8 h-8 rounded-full hover:bg-white/80 flex items-center justify-center transition-all"
+                              className="w-8 h-8 rounded-full hover:bg-white dark:hover:bg-gray-800/80 dark:bg-gray-800/80 flex items-center justify-center transition-all"
                               title="Modifier"
                             >
-                              <Pencil className="w-3.5 h-3.5 text-gray-600" />
+                              <Pencil className="w-3.5 h-3.5 text-gray-600 dark:text-gray-400" />
                             </button>
                             <button
                               onClick={() => handleDeleteComment(comment.id)}
-                              className="w-8 h-8 rounded-full hover:bg-white/80 flex items-center justify-center transition-all"
+                              className="w-8 h-8 rounded-full hover:bg-white dark:hover:bg-gray-800/80 dark:bg-gray-800/80 flex items-center justify-center transition-all"
                               title="Supprimer"
                             >
                               <Trash2 className="w-3.5 h-3.5 text-red-600" />
@@ -228,9 +228,9 @@ export default function LeadCommentsModal({ leadId, leadName, onClose }: LeadCom
                           </div>
                         )}
                       </div>
-                      <p className="text-sm text-gray-700 font-light whitespace-pre-wrap">{comment.content}</p>
+                      <p className="text-sm text-gray-700 dark:text-gray-300 font-light whitespace-pre-wrap">{comment.content}</p>
                       {comment.updated_at !== comment.created_at && (
-                        <p className="text-xs text-gray-400 font-light mt-2">Modifié {formatDate(comment.updated_at)}</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-400 font-light mt-2">Modifié {formatDate(comment.updated_at)}</p>
                       )}
                     </>
                   )}
@@ -239,7 +239,7 @@ export default function LeadCommentsModal({ leadId, leadName, onClose }: LeadCom
             )}
           </div>
 
-          <div className="p-6 border-t border-gray-200/30 flex-shrink-0">
+          <div className="p-6 border-t border-gray-200 dark:border-gray-700/30 flex-shrink-0">
             <div className="flex gap-3">
               <textarea
                 value={newComment}
@@ -250,7 +250,7 @@ export default function LeadCommentsModal({ leadId, leadName, onClose }: LeadCom
                     handleAddComment();
                   }
                 }}
-                className="flex-1 px-4 py-3 border border-gray-200 rounded-2xl text-sm font-light focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 resize-none"
+                className="flex-1 px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 resize-none"
                 rows={2}
                 placeholder="Ajouter un commentaire... (Entrée pour envoyer, Maj+Entrée pour nouvelle ligne)"
               />

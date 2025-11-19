@@ -119,12 +119,12 @@ export default function Partenaires({ onNotificationClick, notificationCount }: 
     <div className="flex-1 overflow-auto">
       <header className="glass-card ml-20 mr-4 lg:mx-8 mt-4 md:mt-6 lg:mt-8 px-4 md:px-6 lg:px-8 py-4 md:py-5 flex items-center justify-between floating-shadow">
         <div>
-          <h1 className="text-xl md:text-2xl font-light text-gray-900">Partenaires</h1>
-          <p className="text-xs md:text-sm text-gray-500 font-light mt-1 hidden sm:block">Accédez aux portails de nos partenaires</p>
+          <h1 className="text-xl md:text-2xl font-light text-gray-900 dark:text-gray-100">Partenaires</h1>
+          <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-light mt-1 hidden sm:block">Accédez aux portails de nos partenaires</p>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={onNotificationClick} className="w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center transition-all hover:scale-105 shadow-sm relative flex-shrink-0">
-            <Bell className="w-5 h-5 text-gray-600" />
+          <button onClick={onNotificationClick} className="w-10 h-10 rounded-full bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 flex items-center justify-center transition-all hover:scale-105 shadow-sm relative flex-shrink-0">
+            <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             {notificationCount > 0 && (
               <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center text-white text-xs font-light shadow-lg animate-pulse">
                 {notificationCount}
@@ -136,8 +136,8 @@ export default function Partenaires({ onNotificationClick, notificationCount }: 
 
       <div className="px-4 md:px-6 lg:px-8 py-4 md:py-6 lg:py-8">
         {error && (
-          <div className="glass-card p-4 floating-shadow mb-4 bg-red-50 border border-red-200">
-            <div className="flex items-center gap-2 text-red-700">
+          <div className="glass-card p-4 floating-shadow mb-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+            <div className="flex items-center gap-2 text-red-700 dark:text-red-300">
               <AlertCircle className="w-5 h-5" />
               <p className="text-sm font-light">{error}</p>
             </div>
@@ -147,7 +147,7 @@ export default function Partenaires({ onNotificationClick, notificationCount }: 
         {!selectedPartner ? (
           <div className="glass-card p-6 md:p-8 floating-shadow">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-light text-gray-900">Nos partenaires assureurs</h2>
+              <h2 className="text-lg font-light text-gray-900 dark:text-gray-100">Nos partenaires assureurs</h2>
               {canManage ? (
                 <button
                   onClick={handleAddPartner}
@@ -157,7 +157,7 @@ export default function Partenaires({ onNotificationClick, notificationCount }: 
                   <span className="hidden sm:inline">Ajouter un partenaire</span>
                 </button>
               ) : (
-                <div className="flex items-center gap-2 text-gray-500 text-xs font-light" title="Réservé aux Admin, Manager et Gestion">
+                <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-xs font-light" title="Réservé aux Admin, Manager et Gestion">
                   <Lock className="w-4 h-4" />
                   <span className="hidden sm:inline">Mode consultation</span>
                 </div>
@@ -210,7 +210,7 @@ export default function Partenaires({ onNotificationClick, notificationCount }: 
                           className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all"
                         />
                       </div>
-                      <span className="text-sm font-light text-gray-700 group-hover:text-gray-900">{partner.name}</span>
+                      <span className="text-sm font-light text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100">{partner.name}</span>
                     </button>
                   </div>
                 ))}
@@ -220,15 +220,15 @@ export default function Partenaires({ onNotificationClick, notificationCount }: 
         ) : (
           <div className="glass-card p-4 floating-shadow">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-light text-gray-900">{selectedPartner.name}</h2>
+              <h2 className="text-lg font-light text-gray-900 dark:text-gray-100">{selectedPartner.name}</h2>
               <button
                 onClick={() => setSelectedPartner(null)}
-                className="w-8 h-8 rounded-full bg-white/80 hover:bg-white flex items-center justify-center transition-all hover:scale-105 shadow-sm"
+                className="w-8 h-8 rounded-full bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 flex items-center justify-center transition-all hover:scale-105 shadow-sm"
               >
-                <X className="w-4 h-4 text-gray-600" />
+                <X className="w-4 h-4 text-gray-600 dark:text-gray-300" />
               </button>
             </div>
-            <div className="w-full h-[calc(100vh-240px)] bg-white rounded-2xl overflow-hidden shadow-inner">
+            <div className="w-full h-[calc(100vh-240px)] bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-inner">
               <iframe
                 src={selectedPartner.website_url}
                 className="w-full h-full"
@@ -252,20 +252,20 @@ export default function Partenaires({ onNotificationClick, notificationCount }: 
         <>
           <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[109]" onClick={cancelDelete} />
           <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 pointer-events-none">
-            <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-md border border-gray-200/50 pointer-events-auto p-6">
+            <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-md border border-gray-200/50 dark:border-gray-700/50 pointer-events-auto p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
-                  <AlertCircle className="w-6 h-6 text-red-600" />
+                <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                  <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
                 </div>
-                <h3 className="text-lg font-light text-gray-900">Confirmer la suppression</h3>
+                <h3 className="text-lg font-light text-gray-900 dark:text-gray-100">Confirmer la suppression</h3>
               </div>
-              <p className="text-sm text-gray-600 font-light mb-6">
+              <p className="text-sm text-gray-600 dark:text-gray-400 font-light mb-6">
                 Êtes-vous sûr de vouloir supprimer ce partenaire ? Cette action est irréversible.
               </p>
               <div className="flex items-center justify-end gap-3">
                 <button
                   onClick={cancelDelete}
-                  className="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl text-sm font-light transition-all disabled:opacity-50"
+                  className="px-6 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-2xl text-sm font-light transition-all disabled:opacity-50"
                   disabled={isDeleting}
                 >
                   Annuler

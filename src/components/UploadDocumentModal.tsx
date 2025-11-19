@@ -125,40 +125,40 @@ export default function UploadDocumentModal({
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-3xl shadow-2xl p-6 max-w-2xl w-full border border-gray-200 relative">
+      <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-6 max-w-2xl w-full border border-gray-200 dark:border-gray-700 relative">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="text-xl font-light text-gray-900">Ajouter un document</h3>
-            <p className="text-sm text-gray-500 font-light mt-1">
+            <h3 className="text-xl font-light text-gray-900 dark:text-gray-100">Ajouter un document</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 font-light mt-1">
               Téléchargez un document PDF vers la bibliothèque
             </p>
           </div>
           <button
             onClick={onClose}
             disabled={uploading}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
+            className="p-2 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors disabled:opacity-50"
           >
-            <X className="w-5 h-5 text-gray-600" />
+            <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-light text-gray-700 mb-2">
+            <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
               Catégorie
             </label>
-            <div className="px-4 py-2.5 bg-blue-50 border border-blue-200 rounded-2xl text-sm text-blue-700 font-light">
+            <div className="px-4 py-2.5 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-2xl text-sm text-gray-900 dark:text-gray-100 text-blue-700 font-light">
               {uploadCategory}
               {uploadSubCategory && ` - ${uploadSubCategory}`}
             </div>
-            <p className="text-xs text-gray-500 mt-1 font-light">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 font-light">
               Sera classé dans : {mapUploadToStorageCategory(uploadCategory)}
               {uploadSubCategory && ` / ${uploadSubCategory}`}
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-light text-gray-700 mb-2">
+            <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
               Titre du document *
             </label>
             <input
@@ -167,12 +167,12 @@ export default function UploadDocumentModal({
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Ex: Guide complet PER 2024"
               disabled={uploading}
-              className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light disabled:opacity-50"
+              className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light disabled:opacity-50"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-light text-gray-700 mb-2">
+            <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
               Fichier PDF *
             </label>
             <div
@@ -189,21 +189,21 @@ export default function UploadDocumentModal({
               />
               {file ? (
                 <div className="flex items-center justify-center gap-3">
-                  <FileText className="w-8 h-8 text-blue-600" />
+                  <FileText className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                   <div className="text-left">
-                    <p className="text-sm font-medium text-gray-900">{file.name}</p>
-                    <p className="text-xs text-gray-500 font-light">
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{file.name}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 font-light">
                       {(file.size / 1024 / 1024).toFixed(2)} MB
                     </p>
                   </div>
                 </div>
               ) : (
                 <>
-                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600 font-light">
+                  <Upload className="w-8 h-8 text-gray-400 dark:text-gray-400 mx-auto mb-2" />
+                  <p className="text-sm text-gray-600 dark:text-gray-400 font-light">
                     Cliquez ou glissez un fichier PDF ici
                   </p>
-                  <p className="text-xs text-gray-500 font-light mt-1">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 font-light mt-1">
                     Maximum 10 MB
                   </p>
                 </>
@@ -214,8 +214,8 @@ export default function UploadDocumentModal({
           {uploading && (
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-gray-600 font-light">Téléchargement en cours...</span>
-                <span className="text-xs text-gray-600 font-light">{progress}%</span>
+                <span className="text-xs text-gray-600 dark:text-gray-400 font-light">Téléchargement en cours...</span>
+                <span className="text-xs text-gray-600 dark:text-gray-400 font-light">{progress}%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                 <div
@@ -227,14 +227,14 @@ export default function UploadDocumentModal({
           )}
 
           {error && (
-            <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl">
+            <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
               <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
               <p className="text-sm text-red-700 font-light">{error}</p>
             </div>
           )}
 
           {success && (
-            <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-xl">
+            <div className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl">
               <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
               <p className="text-sm text-green-700 font-light">Document téléchargé avec succès !</p>
             </div>
@@ -245,14 +245,14 @@ export default function UploadDocumentModal({
               type="button"
               onClick={onClose}
               disabled={uploading}
-              className="flex-1 px-6 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-full text-sm font-light hover:bg-gray-50 transition-all disabled:opacity-50"
+              className="flex-1 px-6 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm text-gray-900 dark:text-gray-100 font-light hover:bg-gray-50 transition-all disabled:opacity-50"
             >
               Annuler
             </button>
             <button
               type="submit"
               disabled={uploading || !file || !title.trim()}
-              className="flex-1 px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
+              className="flex-1 px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm text-gray-900 dark:text-gray-100 font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
             >
               {uploading ? 'Téléchargement...' : 'Télécharger'}
             </button>

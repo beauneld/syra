@@ -151,10 +151,10 @@ export default function PredefinedMessagesModal({
     <>
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998]" onClick={onClose} />
       <div className="fixed inset-0 flex items-center justify-center z-[9999] p-4">
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-4xl max-h-[85vh] flex flex-col">
-          <div className="p-6 border-b border-gray-200/30 flex items-center justify-between flex-shrink-0">
+        <div className="bg-white dark:bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-4xl max-h-[85vh] flex flex-col">
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700/30 flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-4">
-              <h2 className="text-xl font-light text-gray-900">
+              <h2 className="text-xl font-light text-gray-900 dark:text-gray-100">
                 {mode === 'select' ? 'Sélectionner un message prédéfini' : 'Gérer les messages prédéfinis'}
               </h2>
               <div className="flex gap-2">
@@ -182,9 +182,9 @@ export default function PredefinedMessagesModal({
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all"
+              className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-all"
             >
-              <X className="w-4 h-4 text-gray-600" />
+              <X className="w-4 h-4 text-gray-600 dark:text-gray-400" />
             </button>
           </div>
 
@@ -193,14 +193,14 @@ export default function PredefinedMessagesModal({
               <>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <span className="text-sm text-gray-500 font-light">
+                    <span className="text-sm text-gray-500 dark:text-gray-400 font-light">
                       {filteredMessages.length} message{filteredMessages.length > 1 ? 's' : ''}
                     </span>
                   </div>
                   {mode === 'manage' && (
                     <button
                       onClick={() => setIsCreating(true)}
-                      className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all flex items-center gap-2"
+                      className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm text-gray-900 dark:text-gray-100 font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all flex items-center gap-2"
                     >
                       <Plus className="w-4 h-4" />
                       Nouveau message
@@ -220,9 +220,9 @@ export default function PredefinedMessagesModal({
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-2">
-                            <h3 className="text-sm font-medium text-gray-900">{message.title}</h3>
+                            <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">{message.title}</h3>
                           </div>
-                          <p className="text-sm text-gray-600 font-light line-clamp-2">{message.content}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 font-light line-clamp-2">{message.content}</p>
                         </div>
                         {mode === 'manage' && (
                           <div className="flex items-center gap-2 flex-shrink-0">
@@ -231,16 +231,16 @@ export default function PredefinedMessagesModal({
                                 e.stopPropagation();
                                 handleEdit(message);
                               }}
-                              className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all"
+                              className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-all"
                             >
-                              <Edit2 className="w-4 h-4 text-gray-600" />
+                              <Edit2 className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                             </button>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleDelete(message.id);
                               }}
-                              className="w-8 h-8 rounded-full bg-gray-100 hover:bg-red-100 flex items-center justify-center transition-all"
+                              className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-red-100 flex items-center justify-center transition-all"
                             >
                               <Trash2 className="w-4 h-4 text-red-600" />
                             </button>
@@ -252,11 +252,11 @@ export default function PredefinedMessagesModal({
 
                   {filteredMessages.length === 0 && (
                     <div className="text-center py-12">
-                      <p className="text-gray-400 font-light">Aucun message prédéfini</p>
+                      <p className="text-gray-400 dark:text-gray-400 font-light">Aucun message prédéfini</p>
                       {mode === 'manage' && (
                         <button
                           onClick={() => setIsCreating(true)}
-                          className="mt-4 px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all"
+                          className="mt-4 px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm text-gray-900 dark:text-gray-100 font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all"
                         >
                           Créer le premier message
                         </button>
@@ -268,39 +268,39 @@ export default function PredefinedMessagesModal({
             ) : (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-normal text-gray-700 mb-2">Titre</label>
+                  <label className="block text-sm font-normal text-gray-700 dark:text-gray-300 mb-2">Titre</label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder="Ex: Couverture santé complète"
-                    className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-normal focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 rounded-lg text-sm text-gray-900 dark:text-gray-100 font-normal focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                   />
                 </div>
 
 
                 <div>
-                  <label className="block text-sm font-normal text-gray-700 mb-2">Contenu</label>
+                  <label className="block text-sm font-normal text-gray-700 dark:text-gray-300 mb-2">Contenu</label>
                   <textarea
                     value={formData.content}
                     onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                     rows={6}
                     placeholder="Saisissez le contenu du message..."
-                    className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-normal focus:outline-none focus:ring-2 focus:ring-blue-500/50 resize-none"
+                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 rounded-lg text-sm text-gray-900 dark:text-gray-100 font-normal focus:outline-none focus:ring-2 focus:ring-blue-500/50 resize-none"
                   />
                 </div>
 
                 <div className="flex gap-3 pt-4">
                   <button
                     onClick={resetForm}
-                    className="flex-1 px-6 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-full text-sm font-light hover:bg-gray-50 transition-all"
+                    className="flex-1 px-6 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm text-gray-900 dark:text-gray-100 font-light hover:bg-gray-50 transition-all"
                   >
                     Annuler
                   </button>
                   <button
                     onClick={handleSave}
                     disabled={!formData.title || !formData.content}
-                    className="flex-1 px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm text-gray-900 dark:text-gray-100 font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     <Save className="w-4 h-4" />
                     {editingId ? 'Mettre à jour' : 'Enregistrer'}
@@ -311,10 +311,10 @@ export default function PredefinedMessagesModal({
           </div>
 
           {!isCreating && mode === 'manage' && (
-            <div className="p-6 border-t border-gray-200/30 flex-shrink-0">
+            <div className="p-6 border-t border-gray-200 dark:border-gray-700/30 flex-shrink-0">
               <button
                 onClick={onClose}
-                className="w-full px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all"
+                className="w-full px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full text-sm text-gray-900 dark:text-gray-100 font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all"
               >
                 Fermer
               </button>

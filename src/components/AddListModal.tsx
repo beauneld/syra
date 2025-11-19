@@ -172,20 +172,20 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
     <>
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[109]" onClick={onClose} />
       <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 pointer-events-none">
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-4xl border border-gray-200/50 pointer-events-auto max-h-[90vh] flex flex-col">
-          <div className="p-6 border-b border-gray-200/30 flex items-center justify-between flex-shrink-0">
-            <h2 className="text-xl font-light text-gray-900">
+        <div className="bg-white dark:bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-4xl border border-gray-200 dark:border-gray-700/50 pointer-events-auto max-h-[90vh] flex flex-col">
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700/30 flex items-center justify-between flex-shrink-0">
+            <h2 className="text-xl font-light text-gray-900 dark:text-gray-100">
               {list ? 'Éditer la liste' : 'Créer une nouvelle liste'}
             </h2>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all"
+              className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-all"
             >
-              <X className="w-4 h-4 text-gray-600" />
+              <X className="w-4 h-4 text-gray-600 dark:text-gray-400" />
             </button>
           </div>
 
-          <div className="border-b border-gray-200/30 flex-shrink-0">
+          <div className="border-b border-gray-200 dark:border-gray-700/30 flex-shrink-0">
             <div className="flex gap-1 px-6">
               <button
                 onClick={() => setActiveTab('info')}
@@ -224,23 +224,23 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
             {activeTab === 'info' && (
               <div className="space-y-6 max-w-2xl mx-auto">
                 <div>
-                  <label className="block text-sm font-light text-gray-700 mb-2">Nom de la liste</label>
+                  <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">Nom de la liste</label>
                   <input
                     type="text"
                     value={listName}
                     onChange={(e) => setListName(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
                     placeholder="Ex: Professions médicales"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-light text-gray-700 mb-2">Type de liste</label>
+                  <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">Type de liste</label>
                   <select
                     value={listType}
                     onChange={(e) => setListType(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
                   >
                     <option value="Importés">Importés</option>
                     <option value="Manuels">Manuels</option>
@@ -248,8 +248,8 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
                   </select>
                 </div>
 
-                <div className="bg-blue-50/50 border border-blue-100 rounded-2xl p-4">
-                  <p className="text-sm text-gray-600 font-light">
+                <div className="bg-blue-50 dark:bg-blue-900/20/50 border border-blue-100 dark:border-blue-800 rounded-2xl p-4">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 font-light">
                     Après avoir créé la liste, vous pourrez ajouter des leads via l'import CSV ou manuellement dans l'onglet "Leads".
                   </p>
                 </div>
@@ -259,9 +259,9 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
             {activeTab === 'leads' && (
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-white/80 border border-gray-200 rounded-2xl p-6">
-                    <h3 className="text-sm font-light text-gray-900 mb-4 flex items-center gap-2">
-                      <Upload className="w-4 h-4 text-blue-600" />
+                  <div className="bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
+                    <h3 className="text-sm font-light text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+                      <Upload className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                       Importer un fichier CSV
                     </h3>
                     <input
@@ -274,19 +274,19 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl text-sm font-light hover:from-blue-600 hover:to-blue-700 flex items-center justify-center gap-2 shadow-md transition-all"
+                      className="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light hover:from-blue-600 hover:to-blue-700 flex items-center justify-center gap-2 shadow-md transition-all"
                     >
                       <Upload className="w-4 h-4" />
                       Choisir un fichier
                     </button>
-                    <p className="text-xs text-gray-500 font-light mt-3">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 font-light mt-3">
                       Format attendu : Nom, Email, Téléphone
                     </p>
                   </div>
 
-                  <div className="bg-white/80 border border-gray-200 rounded-2xl p-6">
-                    <h3 className="text-sm font-light text-gray-900 mb-4 flex items-center gap-2">
-                      <Plus className="w-4 h-4 text-blue-600" />
+                  <div className="bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
+                    <h3 className="text-sm font-light text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+                      <Plus className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                       Ajouter manuellement
                     </h3>
                     <div className="space-y-3">
@@ -295,26 +295,26 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
                         value={manualLeadName}
                         onChange={(e) => setManualLeadName(e.target.value)}
                         placeholder="Nom complet"
-                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
                       />
                       <input
                         type="email"
                         value={manualLeadEmail}
                         onChange={(e) => setManualLeadEmail(e.target.value)}
                         placeholder="Email"
-                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
                       />
                       <input
                         type="tel"
                         value={manualLeadPhone}
                         onChange={(e) => setManualLeadPhone(e.target.value)}
                         placeholder="Téléphone"
-                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
                       />
                       <button
                         type="button"
                         onClick={handleAddManualLead}
-                        className="w-full px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl text-sm font-light hover:from-green-600 hover:to-green-700 flex items-center justify-center gap-2 shadow-md transition-all"
+                        className="w-full px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl text-sm text-gray-900 dark:text-gray-100 font-light hover:from-green-600 hover:to-green-700 flex items-center justify-center gap-2 shadow-md transition-all"
                       >
                         <Plus className="w-4 h-4" />
                         Ajouter
@@ -325,11 +325,11 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
 
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-sm font-light text-gray-900">Leads dans cette liste ({leads.length})</h3>
+                    <h3 className="text-sm font-light text-gray-900 dark:text-gray-100">Leads dans cette liste ({leads.length})</h3>
                   </div>
-                  <div className="bg-white/80 border border-gray-200 rounded-2xl max-h-96 overflow-y-auto">
+                  <div className="bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-2xl max-h-96 overflow-y-auto">
                     {leads.length === 0 ? (
-                      <div className="p-8 text-center text-gray-500 font-light text-sm">
+                      <div className="p-8 text-center text-gray-500 dark:text-gray-400 font-light text-sm">
                         Aucun lead ajouté pour le moment
                       </div>
                     ) : (
@@ -343,34 +343,34 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
                                   value={editingLeadData?.name || ''}
                                   onChange={(e) => setEditingLeadData(editingLeadData ? { ...editingLeadData, name: e.target.value } : null)}
                                   placeholder="Nom complet"
-                                  className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
                                 />
                                 <input
                                   type="email"
                                   value={editingLeadData?.email || ''}
                                   onChange={(e) => setEditingLeadData(editingLeadData ? { ...editingLeadData, email: e.target.value } : null)}
                                   placeholder="Email"
-                                  className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
                                 />
                                 <input
                                   type="tel"
                                   value={editingLeadData?.phone || ''}
                                   onChange={(e) => setEditingLeadData(editingLeadData ? { ...editingLeadData, phone: e.target.value } : null)}
                                   placeholder="Téléphone"
-                                  className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
                                 />
                                 <div className="flex items-center gap-2">
                                   <button
                                     type="button"
                                     onClick={handleSaveEditLead}
-                                    className="flex-1 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl text-sm font-light hover:from-green-600 hover:to-green-700 transition-all"
+                                    className="flex-1 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl text-sm text-gray-900 dark:text-gray-100 font-light hover:from-green-600 hover:to-green-700 transition-all"
                                   >
                                     Enregistrer
                                   </button>
                                   <button
                                     type="button"
                                     onClick={handleCancelEditLead}
-                                    className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-light transition-all"
+                                    className="flex-1 px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl text-sm text-gray-900 dark:text-gray-100 font-light transition-all"
                                   >
                                     Annuler
                                   </button>
@@ -379,21 +379,21 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
                             ) : (
                               <div className="flex items-center justify-between">
                                 <div className="flex-1">
-                                  <p className="text-sm font-light text-gray-900">{lead.name}</p>
-                                  <p className="text-xs text-gray-600 font-light">{lead.email} • {lead.phone}</p>
+                                  <p className="text-sm font-light text-gray-900 dark:text-gray-100">{lead.name}</p>
+                                  <p className="text-xs text-gray-600 dark:text-gray-400 font-light">{lead.email} • {lead.phone}</p>
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <button
                                     type="button"
                                     onClick={() => handleStartEditLead(lead)}
-                                    className="w-8 h-8 rounded-full bg-blue-50 hover:bg-blue-100 flex items-center justify-center transition-all"
+                                    className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 flex items-center justify-center transition-all"
                                   >
-                                    <Edit2 className="w-4 h-4 text-blue-600" />
+                                    <Edit2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                                   </button>
                                   <button
                                     type="button"
                                     onClick={() => handleRemoveLead(lead.id)}
-                                    className="w-8 h-8 rounded-full bg-red-50 hover:bg-red-100 flex items-center justify-center transition-all"
+                                    className="w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/20 hover:bg-red-100 flex items-center justify-center transition-all"
                                   >
                                     <Trash2 className="w-4 h-4 text-red-600" />
                                   </button>
@@ -412,13 +412,13 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
             {activeTab === 'users' && (
               <div className="space-y-6">
                 <div className="relative">
-                  <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                  <Search className="w-4 h-4 text-gray-400 dark:text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
                   <input
                     type="text"
                     value={userSearchQuery}
                     onChange={(e) => setUserSearchQuery(e.target.value)}
                     placeholder="Rechercher et ajouter des utilisateurs..."
-                    className="w-full pl-10 pr-4 py-2.5 bg-white/80 border border-gray-200/50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                    className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
                   />
                 </div>
 
@@ -430,7 +430,7 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
                   ).length > 0 && (
                   <div>
                     <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-sm font-light text-gray-900">
+                      <h3 className="text-sm font-light text-gray-900 dark:text-gray-100">
                         Résultats de recherche ({availableUsers
                           .filter(user => !selectedUsers.includes(user.id))
                           .filter(user =>
@@ -439,7 +439,7 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
                           ).length})
                       </h3>
                     </div>
-                    <div className="bg-white/80 border border-gray-200 rounded-2xl max-h-60 overflow-y-auto mb-6">
+                    <div className="bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-2xl max-h-60 overflow-y-auto mb-6">
                       <div className="divide-y divide-gray-200">
                         {availableUsers
                           .filter(user => !selectedUsers.includes(user.id))
@@ -457,8 +457,8 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
                                   {user.first_name[0]}{user.last_name[0]}
                                 </div>
                                 <div>
-                                  <p className="text-sm font-light text-gray-900">{user.first_name} {user.last_name}</p>
-                                  <p className="text-xs text-gray-600 font-light">{user.email}</p>
+                                  <p className="text-sm font-light text-gray-900 dark:text-gray-100">{user.first_name} {user.last_name}</p>
+                                  <p className="text-xs text-gray-600 dark:text-gray-400 font-light">{user.email}</p>
                                 </div>
                               </div>
                               <div className="flex items-center gap-2">
@@ -479,7 +479,7 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
                                     toggleUser(user.id);
                                     setUserSearchQuery('');
                                   }}
-                                  className="px-3 py-1.5 rounded-full text-xs font-light transition-all bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100"
+                                  className="px-3 py-1.5 rounded-full text-xs font-light transition-all bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-700 hover:bg-blue-100"
                                 >
                                   Utilisateur
                                 </button>
@@ -493,16 +493,16 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
 
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-sm font-light text-gray-900">Managers ({selectedManagers.length})</h3>
+                    <h3 className="text-sm font-light text-gray-900 dark:text-gray-100">Managers ({selectedManagers.length})</h3>
                   </div>
-                  <div className="bg-white/80 border border-gray-200 rounded-2xl max-h-60 overflow-y-auto">
+                  <div className="bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-2xl max-h-60 overflow-y-auto">
                     {availableUsers
                       .filter(user => selectedManagers.includes(user.id))
                       .filter(user =>
                         `${user.first_name} ${user.last_name}`.toLowerCase().includes(userSearchQuery.toLowerCase()) ||
                         user.email.toLowerCase().includes(userSearchQuery.toLowerCase())
                       ).length === 0 ? (
-                      <div className="p-6 text-center text-gray-500 font-light text-sm">
+                      <div className="p-6 text-center text-gray-500 dark:text-gray-400 font-light text-sm">
                         {userSearchQuery ? 'Aucun manager trouvé' : 'Aucun manager pour cette liste'}
                       </div>
                     ) : (
@@ -523,15 +523,15 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
                                   {user.first_name[0]}{user.last_name[0]}
                                 </div>
                                 <div>
-                                  <p className="text-sm font-light text-gray-900">{user.first_name} {user.last_name}</p>
-                                  <p className="text-xs text-gray-600 font-light">{user.email}</p>
+                                  <p className="text-sm font-light text-gray-900 dark:text-gray-100">{user.first_name} {user.last_name}</p>
+                                  <p className="text-xs text-gray-600 dark:text-gray-400 font-light">{user.email}</p>
                                 </div>
                               </div>
                               <div className="flex items-center gap-2">
                                 <button
                                   type="button"
                                   onClick={() => toggleManager(user.id)}
-                                  className="px-3 py-1.5 rounded-full text-xs font-light transition-all bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100"
+                                  className="px-3 py-1.5 rounded-full text-xs font-light transition-all bg-gray-50 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700"
                                 >
                                   Rétrograder
                                 </button>
@@ -541,7 +541,7 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
                                     toggleUser(user.id);
                                     toggleManager(user.id);
                                   }}
-                                  className="w-8 h-8 rounded-full bg-red-50 hover:bg-red-100 flex items-center justify-center transition-all"
+                                  className="w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/20 hover:bg-red-100 flex items-center justify-center transition-all"
                                 >
                                   <Trash2 className="w-4 h-4 text-red-600" />
                                 </button>
@@ -555,16 +555,16 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
 
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-sm font-light text-gray-900">Utilisateurs avec accès ({selectedUsers.filter(id => !selectedManagers.includes(id)).length})</h3>
+                    <h3 className="text-sm font-light text-gray-900 dark:text-gray-100">Utilisateurs avec accès ({selectedUsers.filter(id => !selectedManagers.includes(id)).length})</h3>
                   </div>
-                  <div className="bg-white/80 border border-gray-200 rounded-2xl max-h-60 overflow-y-auto">
+                  <div className="bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-2xl max-h-60 overflow-y-auto">
                     {availableUsers
                       .filter(user => selectedUsers.includes(user.id) && !selectedManagers.includes(user.id))
                       .filter(user =>
                         `${user.first_name} ${user.last_name}`.toLowerCase().includes(userSearchQuery.toLowerCase()) ||
                         user.email.toLowerCase().includes(userSearchQuery.toLowerCase())
                       ).length === 0 ? (
-                      <div className="p-6 text-center text-gray-500 font-light text-sm">
+                      <div className="p-6 text-center text-gray-500 dark:text-gray-400 font-light text-sm">
                         {userSearchQuery ? 'Aucun utilisateur trouvé' : 'Aucun utilisateur avec accès'}
                       </div>
                     ) : (
@@ -585,8 +585,8 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
                                   {user.first_name[0]}{user.last_name[0]}
                                 </div>
                                 <div>
-                                  <p className="text-sm font-light text-gray-900">{user.first_name} {user.last_name}</p>
-                                  <p className="text-xs text-gray-600 font-light">{user.email}</p>
+                                  <p className="text-sm font-light text-gray-900 dark:text-gray-100">{user.first_name} {user.last_name}</p>
+                                  <p className="text-xs text-gray-600 dark:text-gray-400 font-light">{user.email}</p>
                                 </div>
                               </div>
                               <div className="flex items-center gap-2">
@@ -600,7 +600,7 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
                                 <button
                                   type="button"
                                   onClick={() => toggleUser(user.id)}
-                                  className="w-8 h-8 rounded-full bg-red-50 hover:bg-red-100 flex items-center justify-center transition-all"
+                                  className="w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/20 hover:bg-red-100 flex items-center justify-center transition-all"
                                 >
                                   <Trash2 className="w-4 h-4 text-red-600" />
                                 </button>
@@ -615,17 +615,17 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
             )}
           </form>
 
-          <div className="p-6 border-t border-gray-200/30 flex items-center justify-end gap-3 flex-shrink-0">
+          <div className="p-6 border-t border-gray-200 dark:border-gray-700/30 flex items-center justify-end gap-3 flex-shrink-0">
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl text-sm font-light transition-all"
+              className="px-6 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light transition-all"
             >
               Annuler
             </button>
             <button
               onClick={handleSubmit}
-              className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl text-sm font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all"
+              className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl text-sm text-gray-900 dark:text-gray-100 font-light hover:from-blue-600 hover:to-blue-700 shadow-md transition-all"
             >
               {list ? 'Enregistrer' : 'Créer la liste'}
             </button>
