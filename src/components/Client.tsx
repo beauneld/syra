@@ -119,14 +119,14 @@ export default function Client({ onNotificationClick, notificationCount, initial
     <div className="flex-1 flex flex-col h-screen overflow-hidden">
       <header className="glass-card ml-20 mr-4 lg:mx-8 mt-4 md:mt-6 lg:mt-8 px-4 md:px-6 lg:px-8 py-4 md:py-5 flex items-center justify-between floating-shadow flex-shrink-0">
         <div>
-          <h1 className="text-xl md:text-2xl font-light text-gray-900">Clients</h1>
-          <p className="text-xs md:text-sm text-gray-500 font-light mt-1 hidden sm:block">Gérer vos productions et souscriptions</p>
+          <h1 className="text-xl md:text-2xl font-light text-gray-900 dark:text-gray-100">Clients</h1>
+          <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-light mt-1 hidden sm:block">Gérer vos productions et souscriptions</p>
         </div>
         <button
           onClick={onNotificationClick}
-          className="w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center transition-all hover:scale-105 shadow-sm relative"
+          className="w-10 h-10 rounded-full bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 flex items-center justify-center transition-all hover:scale-105 shadow-sm relative"
         >
-          <Bell className="w-5 h-5 text-gray-600" />
+          <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300" />
           {notificationCount > 0 && (
             <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center text-white text-xs font-light shadow-lg animate-pulse">
               {notificationCount}
@@ -145,8 +145,8 @@ export default function Client({ onNotificationClick, notificationCount, initial
                   onClick={() => setActiveTab(tab.id)}
                   className={`px-4 py-3 text-sm font-light whitespace-nowrap transition-all relative ${
                     activeTab === tab.id
-                      ? 'text-gray-900'
-                      : 'text-gray-500 hover:text-gray-700'
+                      ? 'text-gray-900 dark:text-gray-100'
+                      : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                   }`}
                 >
                   {tab.label}
@@ -162,27 +162,27 @@ export default function Client({ onNotificationClick, notificationCount, initial
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 {activeTab === 'apporteur' && (
                   <div className="relative flex-1 max-w-md">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                     <input
                       type="text"
                       placeholder="Rechercher un apporteur d'affaire..."
                       value={apporteurSearch}
                       onChange={(e) => setApporteurSearch(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                      className="w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
                     />
                   </div>
                 )}
                 {activeTab === 'ma-production' && (
                   <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full">
-                      <CheckCircle className="w-4 h-4 text-green-600" />
-                      <span className="text-sm font-light text-gray-900">
+                    <div className="flex items-center gap-2 px-4 py-2 bg-green-50 dark:bg-green-900/30 rounded-full">
+                      <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400" />
+                      <span className="text-sm font-light text-gray-900 dark:text-gray-100">
                         <span className="font-medium">{dossiersValides.length}</span> dossiers validés
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 rounded-full">
-                      <Clock className="w-4 h-4 text-orange-600" />
-                      <span className="text-sm font-light text-gray-900">
+                    <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 dark:bg-orange-900/30 rounded-full">
+                      <Clock className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+                      <span className="text-sm font-light text-gray-900 dark:text-gray-100">
                         <span className="font-medium">{dossiersEnAttenteMaProduction.length}</span> dossiers en attente
                       </span>
                     </div>
@@ -195,7 +195,7 @@ export default function Client({ onNotificationClick, notificationCount, initial
                       className={`flex items-center gap-2 px-4 py-2 border rounded-full text-sm font-light transition-all ${
                         showOnlyPending
                           ? 'bg-orange-500 text-white border-orange-500 hover:bg-orange-600'
-                          : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+                          : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
                       }`}
                     >
                       <Clock className="w-4 h-4" />
@@ -204,9 +204,9 @@ export default function Client({ onNotificationClick, notificationCount, initial
                   )}
                   <button
                     onClick={() => setShowFilters(!showFilters)}
-                    className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-light hover:bg-gray-50 transition-all"
+                    className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-sm font-light text-white dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
                   >
-                    <Filter className="w-4 h-4 text-gray-600" />
+                    <Filter className="w-4 h-4 text-white dark:text-gray-300" />
                     Filtres
                     {(filterName || filterProduct || filterStatus) && (
                       <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
@@ -219,46 +219,46 @@ export default function Client({ onNotificationClick, notificationCount, initial
                     <>
                       <div className="fixed inset-0 bg-white/60 backdrop-blur-md z-[100]" onClick={() => setShowFilters(false)} />
                       <div className="fixed inset-0 flex items-start justify-center z-[110] p-4 pt-12">
-                        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-[600px]">
-                          <div className="p-6 border-b border-gray-200/30 flex items-center justify-between">
-                            <h2 className="text-xl font-light text-gray-900">Filtres</h2>
+                        <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl w-[600px]">
+                          <div className="p-6 border-b border-gray-200/30 dark:border-gray-700/30 flex items-center justify-between">
+                            <h2 className="text-xl font-light text-gray-900 dark:text-gray-100">Filtres</h2>
                             <button
                               onClick={() => setShowFilters(false)}
-                              className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all"
+                              className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-all"
                             >
-                              <X className="w-4 h-4 text-gray-600" />
+                              <X className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                             </button>
                           </div>
 
                           <div className="p-6 space-y-4">
                             <div>
-                              <label className="block text-sm font-light text-gray-700 mb-2">Nom</label>
+                              <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">Nom</label>
                               <input
                                 type="text"
                                 placeholder="Rechercher par nom"
                                 value={filterName}
                                 onChange={(e) => setFilterName(e.target.value)}
-                                className="w-full px-4 py-2 bg-white/80 border border-gray-200/50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                                className="w-full px-4 py-2 bg-white/80 dark:bg-gray-800/80 border border-gray-200/50 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
                               />
                             </div>
 
                             <div>
-                              <label className="block text-sm font-light text-gray-700 mb-2">Produit</label>
+                              <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">Produit</label>
                               <input
                                 type="text"
                                 placeholder="Rechercher par produit"
                                 value={filterProduct}
                                 onChange={(e) => setFilterProduct(e.target.value)}
-                                className="w-full px-4 py-2 bg-white/80 border border-gray-200/50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                                className="w-full px-4 py-2 bg-white/80 dark:bg-gray-800/80 border border-gray-200/50 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
                               />
                             </div>
 
                             <div>
-                              <label className="block text-sm font-light text-gray-700 mb-2">État du dossier</label>
+                              <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">État du dossier</label>
                               <select
                                 value={filterStatus}
                                 onChange={(e) => setFilterStatus(e.target.value)}
-                                className="w-full px-4 py-2 bg-white/80 border border-gray-200/50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                                className="w-full px-4 py-2 bg-white/80 dark:bg-gray-800/80 border border-gray-200/50 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
                               >
                                 <option value="">Tous les états</option>
                                 <option value="Validé">Validé</option>
@@ -288,10 +288,10 @@ export default function Client({ onNotificationClick, notificationCount, initial
                             </div>
                           </div>
 
-                          <div className="p-6 border-t border-gray-200/30 flex gap-3">
+                          <div className="p-6 border-t border-gray-200/30 dark:border-gray-700/30 flex gap-3">
                             <button
                               onClick={handleResetFilters}
-                              className="flex-1 px-5 py-2 bg-white/80 border border-gray-200/50 text-gray-700 rounded-full text-sm font-light hover:bg-white transition-all"
+                              className="flex-1 px-5 py-2 bg-white/80 dark:bg-gray-800/80 border border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 rounded-full text-sm font-light hover:bg-white dark:hover:bg-gray-800 transition-all"
                             >
                               Réinitialiser
                             </button>

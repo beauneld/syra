@@ -241,18 +241,18 @@ export default function MiseEnRelation({ onNotificationClick, notificationCount 
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-3">
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-3">
                 Pièces jointes
               </label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-3 border border-blue-200">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 rounded-2xl p-3 border border-blue-200 dark:border-blue-700">
                   <div className="flex items-start gap-2">
-                    <div className="p-2 bg-white rounded-xl shadow-sm">
-                      <FileText className="w-4 h-4 text-blue-600" />
+                    <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+                      <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">Plaquette Bienviyance</p>
-                      <p className="text-xs text-gray-600 mt-0.5 truncate">{plaquettePdf}</p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">Plaquette Bienviyance</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5 truncate">{plaquettePdf}</p>
                       {canEditTemplates && (
                         <>
                           <button
@@ -275,14 +275,14 @@ export default function MiseEnRelation({ onNotificationClick, notificationCount 
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-3 border border-gray-200">
+                <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/30 dark:to-gray-700/30 rounded-2xl p-3 border border-gray-200 dark:border-gray-700">
                   <div className="flex items-start gap-2">
-                    <div className="p-2 bg-white rounded-xl shadow-sm">
-                      <FileText className="w-4 h-4 text-gray-600" />
+                    <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+                      <FileText className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">Moche Azran</p>
-                      <p className="text-xs text-gray-600 mt-0.5 truncate">{advisorPdf}</p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">Moche Azran</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5 truncate">{advisorPdf}</p>
                       {canEditAdvisorPdf && (
                         <>
                           <button
@@ -306,14 +306,14 @@ export default function MiseEnRelation({ onNotificationClick, notificationCount 
                 </div>
 
                 {additionalPdf ? (
-                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-3 border border-green-200">
+                  <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 rounded-2xl p-3 border border-green-200 dark:border-green-700">
                     <div className="flex items-start gap-2">
-                      <div className="p-2 bg-white rounded-xl shadow-sm">
-                        <FileText className="w-4 h-4 text-green-600" />
+                      <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+                        <FileText className="w-4 h-4 text-green-600 dark:text-green-400" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">Pièce jointe supplémentaire</p>
-                        <p className="text-xs text-gray-600 mt-0.5 truncate">{additionalPdf}</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">Pièce jointe supplémentaire</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5 truncate">{additionalPdf}</p>
                         <div className="flex items-center gap-2 mt-1.5">
                           <button
                             onClick={() => additionalFileInputRef.current?.click()}
@@ -343,15 +343,15 @@ export default function MiseEnRelation({ onNotificationClick, notificationCount 
                 ) : (
                   <button
                     onClick={() => additionalFileInputRef.current?.click()}
-                    className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-3 border border-dashed border-gray-300 hover:border-gray-400 transition-all hover:from-gray-100 hover:to-gray-200"
+                    className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/30 dark:to-gray-700/30 rounded-2xl p-3 border border-dashed border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 transition-all hover:from-gray-100 hover:to-gray-200 dark:hover:from-gray-700/30 dark:hover:to-gray-600/30"
                   >
                     <div className="flex items-center justify-center gap-2 h-full">
-                      <div className="p-2 bg-white rounded-xl shadow-sm">
-                        <Upload className="w-4 h-4 text-gray-400" />
+                      <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+                        <Upload className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                       </div>
                       <div className="text-left">
-                        <p className="text-sm font-medium text-gray-700">Ajouter une pièce jointe</p>
-                        <p className="text-xs text-gray-500">Fichier PDF uniquement</p>
+                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Ajouter une pièce jointe</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Fichier PDF uniquement</p>
                       </div>
                     </div>
                     <input

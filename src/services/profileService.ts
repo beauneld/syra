@@ -53,6 +53,7 @@ export function getProfilePermissions(profileType: string): ProfilePermissions {
         canTransferLeads: true,
         canDeleteLeads: true,
         canManagePartners: true,
+        canManageLogos: true,
       };
     case 'Manager':
       return {
@@ -69,6 +70,7 @@ export function getProfilePermissions(profileType: string): ProfilePermissions {
         canTransferLeads: true,
         canDeleteLeads: true,
         canManagePartners: true,
+        canManageLogos: true,
       };
     case 'Gestion':
       return {
@@ -85,6 +87,7 @@ export function getProfilePermissions(profileType: string): ProfilePermissions {
         canTransferLeads: true,
         canDeleteLeads: false,
         canManagePartners: false,
+        canManageLogos: false,
       };
     case 'Signataire':
       return {
@@ -101,6 +104,7 @@ export function getProfilePermissions(profileType: string): ProfilePermissions {
         canTransferLeads: false,
         canDeleteLeads: false,
         canManagePartners: false,
+        canManageLogos: false,
       };
     case 'Indicateur d\'affaires':
       return {
@@ -117,6 +121,7 @@ export function getProfilePermissions(profileType: string): ProfilePermissions {
         canTransferLeads: false,
         canDeleteLeads: false,
         canManagePartners: false,
+        canManageLogos: false,
       };
     case 'Marketing':
       return {
@@ -133,6 +138,7 @@ export function getProfilePermissions(profileType: string): ProfilePermissions {
         canTransferLeads: false,
         canDeleteLeads: false,
         canManagePartners: false,
+        canManageLogos: true,
       };
     default:
       return {
@@ -149,6 +155,7 @@ export function getProfilePermissions(profileType: string): ProfilePermissions {
         canTransferLeads: false,
         canDeleteLeads: false,
         canManagePartners: false,
+        canManageLogos: false,
       };
   }
 }

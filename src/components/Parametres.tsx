@@ -56,7 +56,7 @@ export default function Parametres({ onNotificationClick, notificationCount }: P
       setCurrentProfile(profile);
       if (profile) {
         const permissions = getProfilePermissions(profile.profile_type);
-        setCanManageSettings(permissions.canManageOrganizationSettings);
+        setCanManageSettings(permissions.canManageLogos);
         setProfileData({
           firstName: profile.first_name,
           lastName: profile.last_name,
@@ -509,32 +509,32 @@ export default function Parametres({ onNotificationClick, notificationCount }: P
 
           {canManageSettings && (
             <div className="glass-card p-4 md:p-6 lg:p-8 floating-shadow mt-6">
-              <h2 className="text-lg md:text-xl font-light text-gray-900 mb-6">Personnalisation du CRM</h2>
+              <h2 className="text-lg md:text-xl font-light text-gray-900 dark:text-gray-100 mb-6">Personnalisation du CRM</h2>
 
               <div className="space-y-6">
-                <p className="text-sm text-gray-600 font-light">
+                <p className="text-sm text-gray-600 dark:text-gray-400 font-light">
                   Personnalisez les logos du CRM pour tous les utilisateurs de l'organisation.
                 </p>
 
                 {logoSuccessMessage && (
-                  <div className="p-3 bg-green-50 border border-green-200 rounded-2xl">
-                    <p className="text-sm text-green-700 font-light">{logoSuccessMessage}</p>
+                  <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-2xl">
+                    <p className="text-sm text-green-700 dark:text-green-300 font-light">{logoSuccessMessage}</p>
                   </div>
                 )}
 
                 {logoErrorMessage && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-2xl">
-                    <p className="text-sm text-red-700 font-light">{logoErrorMessage}</p>
+                  <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl">
+                    <p className="text-sm text-red-700 dark:text-red-300 font-light">{logoErrorMessage}</p>
                   </div>
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                       Logo principal (sidebar étendue)
                     </label>
-                    <div className="glass-card p-4 rounded-2xl border border-gray-200">
-                      <div className="flex items-center justify-center h-32 mb-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
+                    <div className="glass-card p-4 rounded-2xl border border-gray-200 dark:border-gray-700">
+                      <div className="flex items-center justify-center h-32 mb-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-xl">
                         {mainLogoUrl ? (
                           <img src={mainLogoUrl} alt="Logo principal" className="max-h-24 object-contain" />
                         ) : (
@@ -544,7 +544,7 @@ export default function Parametres({ onNotificationClick, notificationCount }: P
                       <button
                         onClick={() => mainLogoInputRef.current?.click()}
                         disabled={isUploadingMainLogo}
-                        className="w-full px-4 py-2.5 bg-white border border-gray-300 hover:border-gray-400 rounded-2xl text-sm font-light text-gray-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                        className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 rounded-2xl text-sm font-light text-gray-700 dark:text-gray-300 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                       >
                         {isUploadingMainLogo ? (
                           <>
@@ -565,18 +565,18 @@ export default function Parametres({ onNotificationClick, notificationCount }: P
                         onChange={handleMainLogoUpload}
                         className="hidden"
                       />
-                      <p className="text-xs text-gray-500 font-light mt-2 text-center">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 font-light mt-2 text-center">
                         PNG, JPG, SVG - Max 2MB
                       </p>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                       Logo réduit (sidebar rétractée)
                     </label>
-                    <div className="glass-card p-4 rounded-2xl border border-gray-200">
-                      <div className="flex items-center justify-center h-32 mb-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
+                    <div className="glass-card p-4 rounded-2xl border border-gray-200 dark:border-gray-700">
+                      <div className="flex items-center justify-center h-32 mb-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-xl">
                         {collapsedLogoUrl ? (
                           <img src={collapsedLogoUrl} alt="Logo réduit" className="max-h-20 object-contain" />
                         ) : (
@@ -586,7 +586,7 @@ export default function Parametres({ onNotificationClick, notificationCount }: P
                       <button
                         onClick={() => collapsedLogoInputRef.current?.click()}
                         disabled={isUploadingCollapsedLogo}
-                        className="w-full px-4 py-2.5 bg-white border border-gray-300 hover:border-gray-400 rounded-2xl text-sm font-light text-gray-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                        className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 rounded-2xl text-sm font-light text-gray-700 dark:text-gray-300 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                       >
                         {isUploadingCollapsedLogo ? (
                           <>
@@ -614,8 +614,8 @@ export default function Parametres({ onNotificationClick, notificationCount }: P
                   </div>
                 </div>
 
-                <div className="p-4 bg-blue-50 border border-blue-200 rounded-2xl">
-                  <p className="text-xs text-blue-700 font-light">
+                <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl">
+                  <p className="text-xs text-blue-700 dark:text-blue-300 font-light">
                     Les modifications seront visibles par tous les utilisateurs après rechargement de la page.
                   </p>
                 </div>
