@@ -62,10 +62,10 @@ export default function AppointmentDetailsWithLeadModal({
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[109]" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-[109]" onClick={onClose} />
       <div className="fixed inset-0 flex items-center justify-center z-[110] p-4 overflow-y-auto pointer-events-none">
-        <div className="bg-white dark:bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-4xl max-h-[85vh] overflow-y-auto my-4 pointer-events-auto" onClick={(e) => e.stopPropagation()}>
-          <div className="sticky top-0 bg-white dark:bg-gray-900 rounded-t-3xl p-6 border-b border-gray-200 dark:border-gray-700/30 flex items-center justify-between z-10">
+        <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-4xl max-h-[85vh] overflow-y-auto my-4 pointer-events-auto border border-gray-200/50 dark:border-gray-700/30" onClick={(e) => e.stopPropagation()}>
+          <div className="sticky top-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg rounded-t-3xl p-6 border-b border-gray-200 dark:border-gray-700/20 flex items-center justify-between z-10">
             <h2 id="modalTitle" className="text-xl font-light text-gray-900 dark:text-gray-100">Détails du rendez-vous</h2>
             <button
               onClick={onClose}
@@ -77,8 +77,8 @@ export default function AppointmentDetailsWithLeadModal({
           </div>
 
           <div className="p-6 space-y-6">
-            <div className="bg-gradient-to-r from-blue-50 to-blue-100/50 rounded-2xl p-5">
-              <h3 className="text-xl font-medium text-gray-800 mb-1">{appointment.title}</h3>
+            <div className="bg-gradient-to-r from-blue-50 to-blue-100/50 dark:from-blue-900/20 dark:to-blue-800/10 rounded-2xl p-5 border border-blue-100 dark:border-blue-800/30">
+              <h3 className="text-xl font-medium text-gray-800 dark:text-gray-100 mb-1">{appointment.title}</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 font-light">{fullName}</p>
             </div>
 
@@ -91,7 +91,7 @@ export default function AppointmentDetailsWithLeadModal({
                     <Calendar className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="text-xs text-gray-500 dark:text-gray-400 font-light mb-1">Date</p>
-                      <p className="text-sm text-gray-800">{appointment.date}</p>
+                      <p className="text-sm text-gray-800 dark:text-gray-100">{appointment.date}</p>
                     </div>
                   </div>
 

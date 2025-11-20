@@ -111,11 +111,11 @@ export default function RecueilExigencesModal({ onClose, onSave, leadData }: Rec
 
   return createPortal(
     <>
-      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998]" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-[9998]" onClick={onClose} />
       <div className="fixed inset-0 flex items-center justify-center z-[9999] p-4 overflow-y-auto pointer-events-none">
-        <div className="bg-white dark:bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-2xl my-4 pointer-events-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-2xl my-4 pointer-events-auto border border-gray-200/50 dark:border-gray-700/30" onClick={(e) => e.stopPropagation()}>
           {/* Header */}
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700/30 flex items-center justify-between sticky top-0 bg-white dark:bg-gray-900 rounded-t-3xl z-10">
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700/20 flex items-center justify-between sticky top-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg rounded-t-3xl z-10">
             <h2 className="text-xl font-light text-gray-900 dark:text-gray-100">
               Recueil des exigences et des besoins
             </h2>
@@ -128,7 +128,7 @@ export default function RecueilExigencesModal({ onClose, onSave, leadData }: Rec
           </div>
 
           {/* Checkbox */}
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700/30 bg-white">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700/20 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
@@ -143,7 +143,7 @@ export default function RecueilExigencesModal({ onClose, onSave, leadData }: Rec
           </div>
 
           {/* Tabs */}
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700/30 bg-white/50">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700/20 bg-gray-50/50 dark:bg-gray-900/30 backdrop-blur-sm">
             <div className="flex flex-wrap gap-2">
               {[
                 { key: 'situation', label: 'Situation financière' },

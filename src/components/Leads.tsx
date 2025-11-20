@@ -745,16 +745,16 @@ export default function Leads({ onNotificationClick, notificationCount, initialF
 
           {showFilters && (
             <>
-              <div className="fixed inset-0 bg-white/60 backdrop-blur-md z-[100]" onClick={() => setShowFilters(false)} />
+              <div className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-md z-[100]" onClick={() => setShowFilters(false)} />
               <div className="fixed inset-0 flex items-start justify-center z-[110] p-4 pt-12">
-              <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-[600px]">
-                <div className="p-6 border-b border-gray-200/30 flex items-center justify-between">
-                  <h2 className="text-xl font-light text-gray-900">Filtres</h2>
+              <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl w-[600px] border border-gray-200/50 dark:border-gray-700/30">
+                <div className="p-6 border-b border-gray-200/30 dark:border-gray-700/20 flex items-center justify-between bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm rounded-t-3xl">
+                  <h2 className="text-xl font-light text-gray-900 dark:text-gray-100">Filtres</h2>
                   <button
                     onClick={() => setShowFilters(false)}
-                    className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all"
+                    className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-all"
                   >
-                    <X className="w-4 h-4 text-gray-600" />
+                    <X className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                   </button>
                 </div>
 
@@ -762,10 +762,10 @@ export default function Leads({ onNotificationClick, notificationCount, initialF
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <UserCircle className="w-4 h-4 text-gray-500" />
-                  <label className="text-sm font-light text-gray-700">Âge</label>
+                  <label className="text-sm font-light text-gray-700 dark:text-gray-300">Âge</label>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <input type="text" placeholder="Age Min." value={ageMin} onChange={(e) => setAgeMin(e.target.value)} className="px-4 py-2 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light" />
+                  <input type="text" placeholder="Age Min." value={ageMin} onChange={(e) => setAgeMin(e.target.value)} className="px-4 py-2 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light" />
                   <input type="text" placeholder="Age Max." value={ageMax} onChange={(e) => setAgeMax(e.target.value)} className="px-4 py-2 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light" />
                 </div>
               </div>
@@ -774,7 +774,7 @@ export default function Leads({ onNotificationClick, notificationCount, initialF
                   <Globe className="w-4 h-4 text-gray-500" />
                   <label className="text-sm font-light text-gray-700">Région</label>
                 </div>
-                <select value={region} onChange={(e) => setRegion(e.target.value)} className="w-full px-4 py-2 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light">
+                <select value={region} onChange={(e) => setRegion(e.target.value)} className="w-full px-4 py-2 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light">
                   <option>Toute la France</option>
                   <option>Île-de-France</option>
                   <option>Auvergne-Rhône-Alpes</option>
