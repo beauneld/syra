@@ -197,7 +197,7 @@ export default function AddAppointmentFromLeadModal({ onClose, lead }: AddAppoin
             <div>
               <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
                 <Users className="w-4 h-4 text-gray-400 dark:text-gray-400" />
-                Partager avec des collaborateurs (optionnel)
+                Partager avec le signataire
               </label>
               <div className="relative mb-3">
                 <Search className="w-4 h-4 text-gray-400 dark:text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />

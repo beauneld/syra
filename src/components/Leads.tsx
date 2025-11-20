@@ -1,10 +1,11 @@
 import { Search, Filter, CircleUser as UserCircle, List, Grid2x2 as Grid, LayoutGrid, ChevronRight, CalendarDays, Copy, Plus, MessageSquare, Globe, FileText, X, Bell, BellRing } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Lead } from '../types';
 import ReminderModal from './ReminderModal';
 import CalendarSyncModal from './CalendarSyncModal';
 import AddAppointmentFromLeadModal from './AddAppointmentFromLeadModal';
 import LeadCommentsModal from './LeadCommentsModal';
+import { getActiveProfile, getProfilePermissions } from '../services/profileService';
 
 const baseMockLeads: Lead[] = [
   {
@@ -341,7 +342,7 @@ const generateMockLeads = (): Lead[] => {
 
 const mockLeads = generateMockLeads();
 
-function LeadCard({ lead, onUpdate, showOwner }: { lead: Lead; onUpdate: (leadId: string, updates: Partial<Lead>) => void; showOwner?: boolean }) {
+function LeadCard({ lead, onUpdate, showOwner, canViewAllStatuses }: { lead: Lead; onUpdate: (leadId: string, updates: Partial<Lead>) => void; showOwner?: boolean; canViewAllStatuses?: boolean }) {
   const [showStatusMenu, setShowStatusMenu] = useState(false);
   const [showReminderModal, setShowReminderModal] = useState(false);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
@@ -452,7 +453,7 @@ function LeadCard({ lead, onUpdate, showOwner }: { lead: Lead; onUpdate: (leadId
                 <button onClick={() => handleStatusChange('Sans statut')} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-red-50 text-red-700">Sans statut</button>
                 <button onClick={() => handleStatusChange('À rappeler')} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-blue-50 text-blue-700">À rappeler</button>
                 <button onClick={() => handleStatusChange('RDV pris')} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-purple-50 text-purple-700">RDV pris</button>
-                <button onClick={() => handleStatusChange('Signé')} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-green-50 text-green-700">Signé</button>
+                {canViewAllStatuses && <button onClick={() => handleStatusChange('Signé')} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-green-50 text-green-700">Signé</button>}
               </div>
             )}
           </div>
@@ -603,6 +604,20 @@ export default function Leads({ onNotificationClick, notificationCount, initialF
   const [selectedLeadForAppointment, setSelectedLeadForAppointment] = useState<Lead | null>(null);
   const [showAppointmentModalForLead, setShowAppointmentModalForLead] = useState(false);
   const leadsPerPage = 25;
+  const [canViewAllStatuses, setCanViewAllStatuses] = useState(true);
+
+  useEffect(() => {
+    const loadPermissions = async () => {
+      const profile = await getActiveProfile();
+      if (profile) {
+        const permissions = getProfilePermissions(profile.profile_type);
+        setCanViewAllStatuses(permissions.canViewAllStatuses);
+      }
+    };
+    loadPermissions();
+  }, []);
+
+  const allowedStatuses = ['Sans statut', 'NRP', 'À rappeler', 'RDV pris'];
 
   const handleLeadUpdate = (leadId: string, updates: Partial<Lead>) => {
     const updatedLeadData: Partial<Lead> = { ...updates };
@@ -616,6 +631,7 @@ export default function Leads({ onNotificationClick, notificationCount, initialF
   };
 
   const filteredLeads = leads.filter(lead => {
+    if (!canViewAllStatuses && !allowedStatuses.includes(lead.status)) return false;
     if (selectedStatus !== 'Tous les statuts' && lead.status !== selectedStatus) return false;
     return true;
   });
@@ -700,7 +716,7 @@ export default function Leads({ onNotificationClick, notificationCount, initialF
             <option>Sans statut</option>
             <option>À rappeler</option>
             <option>RDV pris</option>
-            <option>Signé</option>
+            {canViewAllStatuses && <option>Signé</option>}
           </select>
 
           <div className="flex items-center gap-2 md:gap-3 overflow-x-auto ml-auto">
@@ -821,7 +837,7 @@ export default function Leads({ onNotificationClick, notificationCount, initialF
                       <option value="Sans statut">Sans statut</option>
                       <option value="À rappeler">À rappeler</option>
                       <option value="RDV pris">RDV pris</option>
-                      <option value="Signé">Signé</option>
+                      {canViewAllStatuses && <option value="Signé">Signé</option>}
                     </select>
                   </div>
             </div>
@@ -848,7 +864,7 @@ export default function Leads({ onNotificationClick, notificationCount, initialF
           {viewMode === 'cards' ? (
             <div className="p-4 md:p-6 space-y-4">
             {paginatedLeads.map((lead) => (
-              <LeadCard key={lead.id} lead={lead} onUpdate={handleLeadUpdate} showOwner={isManagerOrAdmin} />
+              <LeadCard key={lead.id} lead={lead} onUpdate={handleLeadUpdate} showOwner={isManagerOrAdmin} canViewAllStatuses={canViewAllStatuses} />
             ))}
           </div>
           ) : (
@@ -994,7 +1010,7 @@ export default function Leads({ onNotificationClick, notificationCount, initialF
                               setSelectedLeadForAppointment(lead);
                               setShowAppointmentModalForLead(true);
                             }} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-purple-50 text-purple-700">RDV pris</button>
-                            <button onClick={() => { handleLeadUpdate(lead.id, { status: 'Signé' }); setShowStatusMenu(null); }} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-green-50 text-green-700">Signé</button>
+                            {canViewAllStatuses && <button onClick={() => { handleLeadUpdate(lead.id, { status: 'Signé' }); setShowStatusMenu(null); }} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-green-50 text-green-700">Signé</button>}
                           </div>
                         )}
                       </td>
