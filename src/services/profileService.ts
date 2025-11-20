@@ -171,7 +171,7 @@ export function getProfileBadgeColor(profileType: string): string {
     case 'Signataire':
       return 'bg-green-100 text-green-700 border-green-200';
     case 'Indicateur d\'affaires':
-      return 'bg-gray-100 text-gray-700 border-gray-200';
+      return 'bg-purple-100 text-purple-700 border-purple-200';
     case 'Marketing':
       return 'bg-teal-100 text-teal-700 border-teal-200';
     default:
