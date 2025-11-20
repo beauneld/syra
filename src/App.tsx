@@ -136,6 +136,7 @@ function App() {
         }}
         onCollapseChange={setIsSidebarCollapsed}
         onLogout={handleLogout}
+        onProfileChange={setCurrentProfile}
       />
       <div id="contentRight" className={`transition-all duration-300 ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-72'}`}>
         <div className={`transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>

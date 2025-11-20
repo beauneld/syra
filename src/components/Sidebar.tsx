@@ -34,9 +34,10 @@ interface SidebarProps {
   onNavigate: (page: string) => void;
   onCollapseChange: (collapsed: boolean) => void;
   onLogout: () => void;
+  onProfileChange?: (profile: UserProfile) => void;
 }
 
-export default function Sidebar({ currentPage, onNavigate, onCollapseChange, onLogout }: SidebarProps) {
+export default function Sidebar({ currentPage, onNavigate, onCollapseChange, onLogout, onProfileChange }: SidebarProps) {
   const { theme } = useTheme();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
@@ -78,6 +79,7 @@ export default function Sidebar({ currentPage, onNavigate, onCollapseChange, onL
 
   const handleProfileChange = (profile: UserProfile) => {
     setCurrentProfile(profile);
+    onProfileChange?.(profile);
   };
 
   const permissions = currentProfile ? getProfilePermissions(currentProfile.profile_type) : null;
