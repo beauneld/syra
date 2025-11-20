@@ -347,8 +347,8 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
 
                 {/* Assureurs interrogés - Always visible after product selection */}
                 {formData.produit && (
-                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20/50 rounded-2xl border border-blue-200 dark:border-blue-700/50 mt-6">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <div className="p-4 bg-blue-50 dark:bg-gray-800 rounded-2xl border border-blue-200 dark:border-gray-700 mt-6">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                       Assureurs interrogés pour comparaison
                     </label>
                     <div className="flex flex-wrap gap-2">
@@ -356,18 +356,18 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                         assureursInterroges.map((assureur, index) => (
                           <span
                             key={index}
-                            className="px-3 py-1.5 bg-white dark:bg-gray-900 border border-blue-200 dark:border-blue-700 text-blue-700 rounded-full text-xs font-light"
+                            className="px-3 py-1.5 bg-white dark:bg-gray-700 border border-blue-200 dark:border-gray-600 text-blue-700 dark:text-blue-300 rounded-full text-xs font-light"
                           >
                             {assureur}
                           </span>
                         ))
                       ) : (
-                        <span className="px-3 py-1.5 bg-white dark:bg-gray-900 border border-blue-200 dark:border-blue-700 text-blue-700 rounded-full text-xs font-light">
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-700 border border-blue-200 dark:border-gray-600 text-blue-700 dark:text-blue-300 rounded-full text-xs font-light">
                           {formData.assureur}
                         </span>
                       )}
                     </div>
-                    <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    <p className="mt-2 text-xs text-gray-500 dark:text-gray-300">
                       Ces assureurs ont été consultés pour comparer les offres disponibles
                     </p>
                   </div>
@@ -474,8 +474,8 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
 
                   {/* Dynamic fields based on selected product */}
                   {selectedProduct && selectedProduct.fields && selectedProduct.fields.length > 0 && (
-                    <div className="space-y-6 p-4 bg-blue-50 dark:bg-blue-900/20/30 rounded-2xl border border-blue-200 dark:border-blue-700/30">
-                      <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">Champs spécifiques au produit</h4>
+                    <div className="space-y-6 p-4 bg-blue-50 dark:bg-gray-800 rounded-2xl border border-blue-200 dark:border-gray-700">
+                      <h4 className="text-sm font-medium text-gray-900 dark:text-gray-200">Champs spécifiques au produit</h4>
 
                       <div className="grid grid-cols-2 gap-6">
                         {selectedProduct.fields.map((field) => {
