@@ -498,7 +498,7 @@ function LeadCard({ lead, onUpdate, showOwner }: { lead: Lead; onUpdate: (leadId
             {showOwner && (
               <>
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-500 font-light">Propriétaire</span>
+                  <span className="text-sm text-gray-500 dark:text-gray-400 font-light">Indicateur d'affaires</span>
                   <span className="text-sm text-gray-900 font-light">{lead.owner || '-'}</span>
                 </div>
                 {lead.owner_since && (
@@ -876,7 +876,7 @@ export default function Leads({ onNotificationClick, notificationCount, initialF
                     <th className="px-6 py-4 text-left text-xs font-light text-gray-600 uppercase tracking-wider">Email</th>
                     <th className="px-6 py-4 text-left text-xs font-light text-gray-600 uppercase tracking-wider">Statut</th>
                     {leadViewMode === 'manager' && (
-                      <th className="px-6 py-4 text-left text-xs font-light text-gray-600 uppercase tracking-wider">Propriétaire</th>
+                      <th className="px-6 py-4 text-left text-xs font-light text-gray-600 dark:text-gray-400 uppercase tracking-wider">Indicateur</th>
                     )}
                     <th className="px-6 py-4 text-left text-xs font-light text-gray-600 uppercase tracking-wider">Ville</th>
                     <th className="px-6 py-4 text-left text-xs font-light text-gray-600 uppercase tracking-wider">Département</th>
