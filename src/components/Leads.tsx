@@ -368,10 +368,9 @@ function LeadCard({ lead, onUpdate, showOwner, canViewAllStatuses }: { lead: Lea
         return;
       }
       updates.rdv_count = currentRdvCount + 1;
-      setShowStatusMenu(false);
-      setShowAppointmentModal(true);
       setLocalLead({ ...localLead, ...updates });
       onUpdate(lead.id, updates);
+      setShowStatusMenu(false);
       return;
     }
 
@@ -665,6 +664,18 @@ export default function Leads({ onNotificationClick, notificationCount, initialF
     if (updates.status) {
       updatedLeadData.status_updated_at = new Date().toISOString();
       updatedLeadData.status_updated_by = 'Marie Dubois';
+
+      if (updates.status === 'RDV pris') {
+        const lead = leads.find(l => l.id === leadId);
+        const currentRdvCount = lead?.rdv_count || 0;
+
+        if (currentRdvCount >= 2) {
+          alert('Ce lead a déjà atteint le maximum de 2 RDV pris.');
+          return;
+        }
+
+        updatedLeadData.rdv_count = currentRdvCount + 1;
+      }
     }
 
     setLeads(leads.map(lead => lead.id === leadId ? { ...lead, ...updatedLeadData } : lead));
@@ -1054,12 +1065,7 @@ export default function Leads({ onNotificationClick, notificationCount, initialF
                                 <button onClick={() => { handleLeadUpdate(lead.id, { status: 'Nul' }); setShowStatusMenu(null); }} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-yellow-50 text-yellow-700">Nul</button>
                                 <button onClick={() => { handleLeadUpdate(lead.id, { status: 'À rappeler' }); setShowStatusMenu(null); }} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-cyan-50 text-cyan-700">À rappeler</button>
                                 <button onClick={() => { handleLeadUpdate(lead.id, { status: 'Intéressé' }); setShowStatusMenu(null); }} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-purple-50 text-purple-700">Intéressé</button>
-                                <button onClick={() => {
-                                  handleLeadUpdate(lead.id, { status: 'RDV pris' });
-                                  setShowStatusMenu(null);
-                                  setSelectedLeadForAppointment(lead);
-                                  setShowAppointmentModalForLead(true);
-                                }} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-violet-50 text-violet-700">RDV pris</button>
+                                <button onClick={() => { handleLeadUpdate(lead.id, { status: 'RDV pris' }); setShowStatusMenu(null); }} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-violet-50 text-violet-700">RDV pris</button>
                                 <button onClick={() => { handleLeadUpdate(lead.id, { status: 'RDV honoré' }); setShowStatusMenu(null); }} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-lime-50 text-lime-700">RDV honoré</button>
                                 <button onClick={() => { handleLeadUpdate(lead.id, { status: 'Signé' }); setShowStatusMenu(null); }} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-green-50 text-green-700">Signé</button>
                                 <button onClick={() => { handleLeadUpdate(lead.id, { status: 'RDV manqué' }); setShowStatusMenu(null); }} className="block w-full text-left px-3 py-2 text-xs font-light rounded-xl hover:bg-pink-50 text-pink-700">RDV manqué</button>
