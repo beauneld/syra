@@ -325,89 +325,99 @@ export default function AddAppointmentFromLeadModal({ onClose, lead }: AddAppoin
             {selectedSignataire && (
               <>
                 <div>
-                  <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-3">Sélectionner une date</label>
-                  <div className="bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl p-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <button
-                        type="button"
-                        onClick={previousMonth}
-                        className="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center transition-all"
-                      >
-                        <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                      </button>
-                      <h3 className="text-sm font-light text-gray-900 dark:text-gray-100 capitalize">{monthName}</h3>
-                      <button
-                        type="button"
-                        onClick={nextMonth}
-                        className="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center transition-all"
-                      >
-                        <ChevronRight className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                      </button>
-                    </div>
-
-                    <div className="grid grid-cols-7 gap-2 mb-2">
-                      {['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'].map((day) => (
-                        <div key={day} className="text-center text-xs font-light text-gray-500 dark:text-gray-400">
-                          {day}
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="grid grid-cols-7 gap-2">
-                      {days.map((day, index) => (
+                  <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-3">Sélectionner une date et un créneau</label>
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* Calendrier */}
+                    <div className="bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl p-3">
+                      <div className="flex items-center justify-between mb-3">
                         <button
-                          key={index}
                           type="button"
-                          onClick={() => day && handleDateClick(day)}
-                          disabled={!day}
-                          className={`aspect-square rounded-lg text-sm font-light transition-all ${
-                            !day
-                              ? 'invisible'
-                              : selectedDate?.toDateString() === day.toDateString()
-                              ? 'bg-blue-500 text-white'
-                              : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100'
-                          }`}
+                          onClick={previousMonth}
+                          className="w-7 h-7 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center transition-all"
                         >
-                          {day?.getDate()}
+                          <ChevronLeft className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                         </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                        <h3 className="text-xs font-light text-gray-900 dark:text-gray-100 capitalize">{monthName}</h3>
+                        <button
+                          type="button"
+                          onClick={nextMonth}
+                          className="w-7 h-7 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center transition-all"
+                        >
+                          <ChevronRight className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                        </button>
+                      </div>
 
-                {selectedDate && (
-                  <div>
-                    <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-3">
-                      Créneaux disponibles - {selectedDate.toLocaleDateString('fr-FR')}
-                    </label>
-                    <div className="bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl p-4 max-h-64 overflow-y-auto">
-                      <div className="grid grid-cols-4 gap-2">
-                        {timeSlots.map((slot) => (
+                      <div className="grid grid-cols-7 gap-1 mb-1">
+                        {['D', 'L', 'M', 'M', 'J', 'V', 'S'].map((day) => (
+                          <div key={day} className="text-center text-[10px] font-light text-gray-500 dark:text-gray-400">
+                            {day}
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="grid grid-cols-7 gap-1">
+                        {days.map((day, index) => (
                           <button
-                            key={slot.time}
+                            key={index}
                             type="button"
-                            onClick={() => slot.available && handleTimeSlotClick(slot.time)}
-                            disabled={!slot.available}
-                            className={`px-3 py-2 rounded-lg text-xs font-light transition-all ${
-                              !slot.available
-                                ? 'bg-gray-100 dark:bg-gray-700/50 text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                                : selectedTimeSlot === slot.time
+                            onClick={() => day && handleDateClick(day)}
+                            disabled={!day}
+                            className={`aspect-square rounded-lg text-[11px] font-light transition-all ${
+                              !day
+                                ? 'invisible'
+                                : selectedDate?.toDateString() === day.toDateString()
                                 ? 'bg-blue-500 text-white'
-                                : 'bg-gray-50 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-gray-900 dark:text-gray-100'
+                                : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100'
                             }`}
                           >
-                            {slot.time}
+                            {day?.getDate()}
                           </button>
                         ))}
                       </div>
                     </div>
-                    {selectedTimeSlot && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400 font-light mt-2">
-                        Durée: 1 heure ({selectedTimeSlot} - {calculateEndTime(selectedTimeSlot)})
-                      </p>
-                    )}
+
+                    {/* Créneaux disponibles */}
+                    <div className="bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl p-3">
+                      {selectedDate ? (
+                        <>
+                          <h4 className="text-xs font-light text-gray-900 dark:text-gray-100 mb-2">
+                            Créneaux - {selectedDate.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}
+                          </h4>
+                          <div className="space-y-1 max-h-[240px] overflow-y-auto pr-1">
+                            {timeSlots.map((slot) => (
+                              <button
+                                key={slot.time}
+                                type="button"
+                                onClick={() => slot.available && handleTimeSlotClick(slot.time)}
+                                disabled={!slot.available}
+                                className={`w-full px-3 py-1.5 rounded-lg text-xs font-light transition-all ${
+                                  !slot.available
+                                    ? 'bg-gray-100 dark:bg-gray-700/50 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                                    : selectedTimeSlot === slot.time
+                                    ? 'bg-blue-500 text-white'
+                                    : 'bg-gray-50 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-gray-900 dark:text-gray-100'
+                                }`}
+                              >
+                                {slot.time}
+                              </button>
+                            ))}
+                          </div>
+                          {selectedTimeSlot && (
+                            <p className="text-[10px] text-gray-500 dark:text-gray-400 font-light mt-2">
+                              Durée: 1h ({selectedTimeSlot} - {calculateEndTime(selectedTimeSlot)})
+                            </p>
+                          )}
+                        </>
+                      ) : (
+                        <div className="h-full flex items-center justify-center">
+                          <p className="text-xs text-gray-500 dark:text-gray-400 font-light text-center">
+                            Sélectionnez une date
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                )}
+                </div>
               </>
             )}
 
