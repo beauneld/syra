@@ -1,4 +1,4 @@
-import { X, AlertCircle } from 'lucide-react';
+import { X, AlertCircle, Paperclip, FileText } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { INSURANCE_COMPANIES, getCompanyByName, getProductByName, getAllCompanyNames, ProductConfig } from '../data/insuranceProducts';
@@ -78,6 +78,7 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
   const [selectedProduct, setSelectedProduct] = useState<ProductConfig | null>(null);
   const [reminderMessage, setReminderMessage] = useState('');
   const [showReminderSuccess, setShowReminderSuccess] = useState(false);
+  const [attachments, setAttachments] = useState<File[]>([]);
   const [formData, setFormData] = useState<ContractData>(editContract || {
     assureur: '',
     gamme_contrat: '',
@@ -756,6 +757,80 @@ export default function AddContractModal({ onClose, onSave, editContract, editIn
                   </div>
                 </div>
               )}
+
+              {/* Section Pièces jointes */}
+              <div>
+                <h3 className="text-lg font-light text-gray-900 dark:text-gray-100 mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">Pièces jointes</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 font-light mb-4">Format accepté: PDF, JPG (5Mo maximum par fichier)</p>
+
+                <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-6 text-center hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
+                  <input
+                    type="file"
+                    id="contract-attachments-input"
+                    accept=".pdf,.jpg,.jpeg"
+                    multiple
+                    onChange={(e) => {
+                      const files = Array.from(e.target.files || []);
+                      const validFiles = files.filter(file => {
+                        const isValidType = file.type === 'application/pdf' || file.type === 'image/jpeg' || file.type === 'image/jpg';
+                        const isValidSize = file.size <= 5 * 1024 * 1024;
+                        if (!isValidType) {
+                          alert(`${file.name}: Format non accepté. Uniquement PDF et JPG.`);
+                          return false;
+                        }
+                        if (!isValidSize) {
+                          alert(`${file.name}: Fichier trop volumineux (max 5Mo).`);
+                          return false;
+                        }
+                        return true;
+                      });
+                      setAttachments([...attachments, ...validFiles]);
+                      e.target.value = '';
+                    }}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor="contract-attachments-input"
+                    className="cursor-pointer flex flex-col items-center"
+                  >
+                    <Paperclip className="w-8 h-8 text-gray-400 dark:text-gray-500 mb-2" />
+                    <p className="text-sm text-gray-600 dark:text-gray-400 font-light">Cliquez pour ajouter des fichiers</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-500 font-light mt-1">ou glissez-déposez vos fichiers ici</p>
+                  </label>
+                </div>
+
+                {attachments.length > 0 && (
+                  <div className="mt-4 space-y-2">
+                    <h4 className="text-sm font-light text-gray-700 dark:text-gray-300">Fichiers ajoutés ({attachments.length})</h4>
+                    {attachments.map((file, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center gap-3 flex-1">
+                          {file.type === 'application/pdf' ? (
+                            <FileText className="w-5 h-5 text-red-500" />
+                          ) : (
+                            <FileText className="w-5 h-5 text-blue-500" />
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm text-gray-900 dark:text-gray-100 font-light truncate">{file.name}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 font-light">
+                              {(file.size / 1024).toFixed(2)} Ko
+                            </p>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setAttachments(attachments.filter((_, i) => i !== index));
+                          }}
+                          className="w-8 h-8 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-all"
+                        >
+                          <X className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               {/* Section Commentaires - Moved to the end */}
               <div>

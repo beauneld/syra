@@ -1,4 +1,4 @@
-import { X, Clock, MapPin, Bell, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, Clock, MapPin, Bell, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Lead } from '../types';
@@ -31,6 +31,8 @@ export default function AddAppointmentFromLeadModal({ onClose, lead }: AddAppoin
 
   const [signataires, setSignataires] = useState<UserProfile[]>([]);
   const [selectedSignataire, setSelectedSignataire] = useState<string>('');
+  const [signataireSearchQuery, setSignataireSearchQuery] = useState<string>('');
+  const [showSignataireDropdown, setShowSignataireDropdown] = useState<boolean>(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>('');
@@ -241,23 +243,76 @@ export default function AddAppointmentFromLeadModal({ onClose, lead }: AddAppoin
               {loading ? (
                 <p className="text-sm text-gray-500">Chargement des signataires...</p>
               ) : (
-                <select
-                  value={selectedSignataire}
-                  onChange={(e) => {
-                    setSelectedSignataire(e.target.value);
-                    setSelectedDate(null);
-                    setSelectedTimeSlot('');
-                  }}
-                  className="w-full px-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-                  required
-                >
-                  <option value="">Sélectionner un signataire</option>
-                  {signataires.map((sig) => (
-                    <option key={sig.id} value={sig.id}>
-                      {sig.full_name}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <div className="relative">
+                    <Search className="w-4 h-4 text-gray-400 dark:text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                    <input
+                      type="text"
+                      value={signataireSearchQuery}
+                      onChange={(e) => {
+                        setSignataireSearchQuery(e.target.value);
+                        setShowSignataireDropdown(true);
+                      }}
+                      onFocus={() => setShowSignataireDropdown(true)}
+                      placeholder="Rechercher un signataire..."
+                      className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                      required={!selectedSignataire}
+                    />
+                  </div>
+
+                  {showSignataireDropdown && signataireSearchQuery && (
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 max-h-64 overflow-y-auto z-20">
+                      {signataires
+                        .filter(sig =>
+                          sig.full_name.toLowerCase().includes(signataireSearchQuery.toLowerCase()) ||
+                          sig.email.toLowerCase().includes(signataireSearchQuery.toLowerCase())
+                        )
+                        .map((sig) => (
+                          <button
+                            key={sig.id}
+                            type="button"
+                            onClick={() => {
+                              setSelectedSignataire(sig.id);
+                              setSignataireSearchQuery(sig.full_name);
+                              setShowSignataireDropdown(false);
+                              setSelectedDate(null);
+                              setSelectedTimeSlot('');
+                            }}
+                            className="w-full p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all flex flex-col gap-1 border-b border-gray-100 dark:border-gray-700 last:border-b-0"
+                          >
+                            <span className="text-sm font-light text-gray-900 dark:text-gray-100">{sig.full_name}</span>
+                            <span className="text-xs text-gray-600 dark:text-gray-400 font-light">{sig.email}</span>
+                          </button>
+                        ))}
+                      {signataires.filter(sig =>
+                        sig.full_name.toLowerCase().includes(signataireSearchQuery.toLowerCase()) ||
+                        sig.email.toLowerCase().includes(signataireSearchQuery.toLowerCase())
+                      ).length === 0 && (
+                        <p className="p-3 text-sm text-gray-500 dark:text-gray-400 text-center">Aucun signataire trouvé</p>
+                      )}
+                    </div>
+                  )}
+
+                  {selectedSignataire && !showSignataireDropdown && (
+                    <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-2xl border border-blue-100 dark:border-blue-800 flex items-center justify-between">
+                      <span className="text-sm font-light text-gray-900 dark:text-gray-100">
+                        {signataires.find(s => s.id === selectedSignataire)?.full_name}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedSignataire('');
+                          setSignataireSearchQuery('');
+                          setSelectedDate(null);
+                          setSelectedTimeSlot('');
+                        }}
+                        className="w-6 h-6 rounded-full hover:bg-blue-100 dark:hover:bg-blue-800 flex items-center justify-center transition-all"
+                      >
+                        <X className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                      </button>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
 
