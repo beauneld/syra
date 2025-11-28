@@ -5,7 +5,7 @@ export async function getAllProfiles(): Promise<UserProfile[]> {
   const { data, error } = await supabase
     .from('user_profiles')
     .select('*')
-    .or('profile_type.neq.Signataire,id.eq.f8e3999a-4249-4efe-8dfc-b59c4214ce04')
+    .or('profile_type.neq.Signataire,id.eq.a6834987-f0af-4037-84a8-5c2aa43dcc97')
     .order('profile_type', { ascending: true });
 
   if (error) throw new Error(`Erreur lors du chargement des profils: ${error.message}`);
