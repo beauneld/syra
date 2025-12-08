@@ -1,77 +1,9 @@
 import { Plus, Search, MoreHorizontal, X, Bell, UserPlus, Trash2, Edit2, FileText, Upload } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { User } from '../types';
 import { uploadAdvisorBrochure, deleteAdvisorBrochure, getAdvisorBrochureUrl, updateUserBrochure } from '../services/advisorBrochureService';
 import UserDetailsModal from './UserDetailsModal';
-
-const mockUsers: User[] = [
-  {
-    id: '1',
-    organization_id: '1',
-    email: 'e.aboukrat@bnvce.fr',
-    first_name: 'Ethan',
-    last_name: 'Aboukrat',
-    role: 'indicateur_affaires',
-    is_active: true,
-    created_at: '2025-10-02',
-    updated_at: '2025-10-02',
-  },
-  {
-    id: '2',
-    organization_id: '1',
-    email: 'd.alamihamdouni@bnvce.fr',
-    first_name: 'Driss',
-    last_name: 'Alami hamdouni',
-    role: 'indicateur_affaires',
-    is_active: true,
-    created_at: '2025-10-02',
-    updated_at: '2025-10-02',
-  },
-  {
-    id: '3',
-    organization_id: '1',
-    email: 'm.assouline@bnvce.fr',
-    first_name: 'Maor',
-    last_name: 'Assouline',
-    role: 'indicateur_affaires',
-    is_active: true,
-    created_at: '2025-10-02',
-    updated_at: '2025-10-02',
-  },
-  {
-    id: '4',
-    organization_id: '1',
-    email: 's.atlan@bnvce.fr',
-    first_name: 'Sacha',
-    last_name: 'Atlan',
-    role: 'signataire',
-    is_active: true,
-    created_at: '2025-10-02',
-    updated_at: '2025-10-02',
-  },
-  {
-    id: '5',
-    organization_id: '1',
-    email: 'o.attard@bnvce.fr',
-    first_name: 'Ornella',
-    last_name: 'Attard',
-    role: 'indicateur_affaires',
-    is_active: true,
-    created_at: '2025-10-02',
-    updated_at: '2025-10-02',
-  },
-  {
-    id: '6',
-    organization_id: '1',
-    email: 'moche.azran@bnvce.fr',
-    first_name: 'Moche',
-    last_name: 'Azran',
-    role: 'gestion',
-    is_active: true,
-    created_at: '2025-10-02',
-    updated_at: '2025-10-02',
-  },
-];
+import { supabase } from '../lib/supabase';
 
 const availableLists = [
   'Particuliers',
@@ -111,6 +43,8 @@ interface UtilisateursProps {
 }
 
 export default function Utilisateurs({ onNotificationClick, notificationCount }: UtilisateursProps) {
+  const [users, setUsers] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -138,6 +72,53 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
   });
   const [editBrochureFile, setEditBrochureFile] = useState<File | null>(null);
   const [existingBrochureUrl, setExistingBrochureUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
+  const loadUsers = async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      const formattedUsers: User[] = (data || []).map(profile => ({
+        id: profile.id,
+        organization_id: 'default',
+        email: profile.email,
+        first_name: profile.first_name,
+        last_name: profile.last_name,
+        role: mapProfileTypeToRole(profile.profile_type),
+        is_active: profile.is_active || false,
+        created_at: profile.created_at,
+        updated_at: profile.updated_at,
+        advisor_brochure_url: profile.advisor_brochure_url,
+      }));
+
+      setUsers(formattedUsers);
+    } catch (error) {
+      console.error('Error loading users:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const mapProfileTypeToRole = (profileType: string): string => {
+    const roleMap: Record<string, string> = {
+      'Admin': 'admin',
+      'Manager': 'manager',
+      'Gestion': 'gestion',
+      'Signataire': 'signataire',
+      "Indicateur d'affaires": 'indicateur_affaires',
+      'Marketing': 'marketing',
+    };
+    return roleMap[profileType] || 'gestion';
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -288,8 +269,17 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
           </div>
 
           <div className="p-4 md:p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {mockUsers.map((user, index) => (
+            {isLoading ? (
+              <div className="text-center py-12">
+                <div className="animate-pulse text-gray-500">Chargement des utilisateurs...</div>
+              </div>
+            ) : users.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500 font-light">Aucun utilisateur trouvé</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                {users.map((user, index) => (
                 <div key={user.id} className="glass-card p-6 floating-shadow hover:bg-white transition-all cursor-pointer" onClick={() => handleUserClick(user)}>
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
@@ -360,8 +350,9 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
                     </span>
                   </div>
                 </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="hidden">
@@ -376,7 +367,7 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200/30">
-                {mockUsers.map((user, index) => (
+                {users.map((user, index) => (
                   <tr key={user.id} className="hover:bg-white transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
@@ -420,8 +411,8 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
 
           <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
             <p className="text-sm text-gray-700 font-light">
-              Affichage de <span className="font-normal">1</span> à <span className="font-normal">{mockUsers.length}</span> sur{' '}
-              <span className="font-normal">{mockUsers.length}</span> résultats
+              Affichage de <span className="font-normal">1</span> à <span className="font-normal">{users.length}</span> sur{' '}
+              <span className="font-normal">{users.length}</span> résultats
             </p>
           </div>
         </div>
