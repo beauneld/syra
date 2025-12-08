@@ -19,6 +19,7 @@ import Login from './components/Login';
 import { supabase } from './lib/supabase';
 import { getActiveProfile } from './services/profileService';
 import { UserProfile } from './types';
+import { startSession, endSession, updateHeartbeat } from './services/activityTrackingService';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -60,7 +61,41 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    if (currentProfile && isAuthenticated) {
+      const initializeSession = async () => {
+        await startSession(currentProfile.id);
+      };
+      initializeSession();
+
+      const heartbeatInterval = setInterval(() => {
+        const sessionId = localStorage.getItem('current_session_id');
+        if (sessionId) {
+          updateHeartbeat(sessionId);
+        }
+      }, 30000);
+
+      const handleBeforeUnload = () => {
+        const sessionId = localStorage.getItem('current_session_id');
+        if (sessionId) {
+          endSession(sessionId);
+        }
+      };
+
+      window.addEventListener('beforeunload', handleBeforeUnload);
+
+      return () => {
+        clearInterval(heartbeatInterval);
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+      };
+    }
+  }, [currentProfile, isAuthenticated]);
+
   const handleLogout = async () => {
+    const sessionId = localStorage.getItem('current_session_id');
+    if (sessionId) {
+      await endSession(sessionId);
+    }
     await supabase.auth.signOut();
     setIsAuthenticated(false);
   };

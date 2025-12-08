@@ -2,6 +2,7 @@ import { Plus, Search, MoreHorizontal, X, Bell, UserPlus, Trash2, Edit2, FileTex
 import { useState } from 'react';
 import { User } from '../types';
 import { uploadAdvisorBrochure, deleteAdvisorBrochure, getAdvisorBrochureUrl, updateUserBrochure } from '../services/advisorBrochureService';
+import UserDetailsModal from './UserDetailsModal';
 
 const mockUsers: User[] = [
   {
@@ -113,8 +114,10 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
   const [userToEdit, setUserToEdit] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -233,6 +236,11 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
     setUserToDelete(null);
   };
 
+  const handleUserClick = (user: User) => {
+    setSelectedUser(user);
+    setShowDetailsModal(true);
+  };
+
   return (
     <div className="flex-1 overflow-auto">
       <header className="glass-card ml-20 mr-4 lg:mx-8 mt-4 md:mt-6 lg:mt-8 px-4 md:px-6 lg:px-8 py-4 md:py-5 flex items-center justify-between floating-shadow">
@@ -282,7 +290,7 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
           <div className="p-4 md:p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {mockUsers.map((user, index) => (
-                <div key={user.id} className="glass-card p-6 floating-shadow hover:bg-white transition-all">
+                <div key={user.id} className="glass-card p-6 floating-shadow hover:bg-white transition-all cursor-pointer" onClick={() => handleUserClick(user)}>
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${avatarColors[index % avatarColors.length]} flex items-center justify-center text-white text-sm font-light shadow-md flex-shrink-0`}>
@@ -296,7 +304,10 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
                     <div className="flex items-center gap-2 flex-shrink-0">
                       {user.role === 'signataire' && user.advisor_brochure_url && (
                         <button
-                          onClick={() => window.open(getAdvisorBrochureUrl(user.advisor_brochure_url!), '_blank')}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            window.open(getAdvisorBrochureUrl(user.advisor_brochure_url!), '_blank');
+                          }}
                           className="w-8 h-8 rounded-full bg-green-50 hover:bg-green-100 flex items-center justify-center transition-all hover:scale-105 shadow-sm"
                           title="Voir la plaquette"
                         >
@@ -304,14 +315,20 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
                         </button>
                       )}
                       <button
-                        onClick={() => handleEditClick(user)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditClick(user);
+                        }}
                         className="w-8 h-8 rounded-full bg-blue-50 hover:bg-blue-100 flex items-center justify-center transition-all hover:scale-105 shadow-sm"
                         title="Modifier l'utilisateur"
                       >
                         <Edit2 className="w-4 h-4 text-blue-600" />
                       </button>
                       <button
-                        onClick={() => handleDeleteClick(user)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteClick(user);
+                        }}
                         className="w-8 h-8 rounded-full bg-red-50 hover:bg-red-100 flex items-center justify-center transition-all hover:scale-105 shadow-sm"
                         title="Supprimer l'utilisateur"
                       >
@@ -748,6 +765,10 @@ export default function Utilisateurs({ onNotificationClick, notificationCount }:
             </div>
           </div>
         </>
+      )}
+
+      {showDetailsModal && selectedUser && (
+        <UserDetailsModal user={selectedUser} onClose={() => setShowDetailsModal(false)} />
       )}
     </div>
   );

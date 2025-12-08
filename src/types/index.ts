@@ -199,3 +199,33 @@ export interface ProfilePermissions {
   canManageLogos: boolean;
   canViewAllStatuses: boolean;
 }
+
+export interface UserSession {
+  id: string;
+  user_id: string;
+  session_start: string;
+  session_end?: string;
+  duration_seconds?: number;
+  ip_address?: string;
+  user_agent?: string;
+  created_at: string;
+}
+
+export interface UserDailyActivity {
+  id: string;
+  user_id: string;
+  activity_date: string;
+  total_duration_seconds: number;
+  session_count: number;
+  first_login?: string;
+  last_logout?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ActivityStats {
+  totalHours: number;
+  activeDays: number;
+  averageHoursPerDay: number;
+  totalSessions: number;
+}
