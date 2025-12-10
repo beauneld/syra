@@ -352,137 +352,135 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
                     </span>
                   </div>
 
-                  <div className="space-y-3">
-                    {manualLeadStep === 1 && (
-                      <>
-                        <div>
-                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Prénom</label>
-                          <input
-                            type="text"
-                            value={manualLeadData.first_name}
-                            onChange={(e) => setManualLeadData({ ...manualLeadData, first_name: e.target.value })}
-                            placeholder="Prénom"
-                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Nom</label>
-                          <input
-                            type="text"
-                            value={manualLeadData.last_name}
-                            onChange={(e) => setManualLeadData({ ...manualLeadData, last_name: e.target.value })}
-                            placeholder="Nom"
-                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Téléphone</label>
-                          <input
-                            type="tel"
-                            value={manualLeadData.phone}
-                            onChange={(e) => setManualLeadData({ ...manualLeadData, phone: e.target.value })}
-                            placeholder="Téléphone"
-                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-                          />
-                        </div>
-                      </>
-                    )}
+                  {manualLeadStep === 1 && (
+                    <div className="grid grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Prénom</label>
+                        <input
+                          type="text"
+                          value={manualLeadData.first_name}
+                          onChange={(e) => setManualLeadData({ ...manualLeadData, first_name: e.target.value })}
+                          placeholder="Prénom"
+                          className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Nom</label>
+                        <input
+                          type="text"
+                          value={manualLeadData.last_name}
+                          onChange={(e) => setManualLeadData({ ...manualLeadData, last_name: e.target.value })}
+                          placeholder="Nom"
+                          className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Téléphone</label>
+                        <input
+                          type="tel"
+                          value={manualLeadData.phone}
+                          onChange={(e) => setManualLeadData({ ...manualLeadData, phone: e.target.value })}
+                          placeholder="Téléphone"
+                          className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        />
+                      </div>
+                    </div>
+                  )}
 
-                    {manualLeadStep === 2 && (
-                      <>
-                        <div>
-                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Email</label>
-                          <input
-                            type="email"
-                            value={manualLeadData.email}
-                            onChange={(e) => setManualLeadData({ ...manualLeadData, email: e.target.value })}
-                            placeholder="Email"
-                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Statut</label>
-                          <input
-                            type="text"
-                            value={manualLeadData.status}
-                            onChange={(e) => setManualLeadData({ ...manualLeadData, status: e.target.value })}
-                            placeholder="Statut"
-                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Ville</label>
-                          <input
-                            type="text"
-                            value={manualLeadData.city}
-                            onChange={(e) => setManualLeadData({ ...manualLeadData, city: e.target.value })}
-                            placeholder="Ville"
-                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-                          />
-                        </div>
-                      </>
-                    )}
+                  {manualLeadStep === 2 && (
+                    <div className="grid grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                        <input
+                          type="email"
+                          value={manualLeadData.email}
+                          onChange={(e) => setManualLeadData({ ...manualLeadData, email: e.target.value })}
+                          placeholder="Email"
+                          className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Statut</label>
+                        <input
+                          type="text"
+                          value={manualLeadData.status}
+                          onChange={(e) => setManualLeadData({ ...manualLeadData, status: e.target.value })}
+                          placeholder="Statut"
+                          className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Ville</label>
+                        <input
+                          type="text"
+                          value={manualLeadData.city}
+                          onChange={(e) => setManualLeadData({ ...manualLeadData, city: e.target.value })}
+                          placeholder="Ville"
+                          className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        />
+                      </div>
+                    </div>
+                  )}
 
-                    {manualLeadStep === 3 && (
-                      <>
-                        <div>
-                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Département</label>
-                          <input
-                            type="text"
-                            value={manualLeadData.department}
-                            onChange={(e) => setManualLeadData({ ...manualLeadData, department: e.target.value })}
-                            placeholder="Département"
-                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Année</label>
-                          <input
-                            type="text"
-                            value={manualLeadData.birth_year}
-                            onChange={(e) => setManualLeadData({ ...manualLeadData, birth_year: e.target.value })}
-                            placeholder="Année"
-                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Imposition</label>
-                          <input
-                            type="text"
-                            value={manualLeadData.imposition}
-                            onChange={(e) => setManualLeadData({ ...manualLeadData, imposition: e.target.value })}
-                            placeholder="Imposition"
-                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-                          />
-                        </div>
-                      </>
-                    )}
+                  {manualLeadStep === 3 && (
+                    <div className="grid grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Département</label>
+                        <input
+                          type="text"
+                          value={manualLeadData.department}
+                          onChange={(e) => setManualLeadData({ ...manualLeadData, department: e.target.value })}
+                          placeholder="Département"
+                          className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Année</label>
+                        <input
+                          type="text"
+                          value={manualLeadData.birth_year}
+                          onChange={(e) => setManualLeadData({ ...manualLeadData, birth_year: e.target.value })}
+                          placeholder="Année"
+                          className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Imposition</label>
+                        <input
+                          type="text"
+                          value={manualLeadData.imposition}
+                          onChange={(e) => setManualLeadData({ ...manualLeadData, imposition: e.target.value })}
+                          placeholder="Imposition"
+                          className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        />
+                      </div>
+                    </div>
+                  )}
 
-                    {manualLeadStep === 4 && (
-                      <>
-                        <div>
-                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Résidence</label>
-                          <input
-                            type="text"
-                            value={manualLeadData.residence_status}
-                            onChange={(e) => setManualLeadData({ ...manualLeadData, residence_status: e.target.value })}
-                            placeholder="Résidence"
-                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Code postal</label>
-                          <input
-                            type="text"
-                            value={manualLeadData.postal_code}
-                            onChange={(e) => setManualLeadData({ ...manualLeadData, postal_code: e.target.value })}
-                            placeholder="Code postal"
-                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-                          />
-                        </div>
-                      </>
-                    )}
-                  </div>
+                  {manualLeadStep === 4 && (
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Résidence</label>
+                        <input
+                          type="text"
+                          value={manualLeadData.residence_status}
+                          onChange={(e) => setManualLeadData({ ...manualLeadData, residence_status: e.target.value })}
+                          placeholder="Résidence"
+                          className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Code postal</label>
+                        <input
+                          type="text"
+                          value={manualLeadData.postal_code}
+                          onChange={(e) => setManualLeadData({ ...manualLeadData, postal_code: e.target.value })}
+                          placeholder="Code postal"
+                          className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                        />
+                      </div>
+                    </div>
+                  )}
 
                   <div className="flex items-center justify-between mt-4 gap-2">
                     <button
