@@ -67,9 +67,20 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
     list?.managers ? getUserIdsFromNames(list.managers) : examples.managers
   );
   const [userSearchQuery, setUserSearchQuery] = useState('');
-  const [manualLeadName, setManualLeadName] = useState('');
-  const [manualLeadEmail, setManualLeadEmail] = useState('');
-  const [manualLeadPhone, setManualLeadPhone] = useState('');
+  const [manualLeadStep, setManualLeadStep] = useState(1);
+  const [manualLeadData, setManualLeadData] = useState({
+    first_name: '',
+    last_name: '',
+    phone: '',
+    email: '',
+    status: '',
+    city: '',
+    department: '',
+    birth_year: '',
+    imposition: '',
+    residence_status: '',
+    postal_code: ''
+  });
   const [editingLeadId, setEditingLeadId] = useState<string | null>(null);
   const [editingLeadData, setEditingLeadData] = useState<Lead | null>(null);
   const [leadSearchQuery, setLeadSearchQuery] = useState('');
@@ -114,20 +125,31 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
   };
 
   const handleAddManualLead = () => {
-    if (!manualLeadName && !manualLeadEmail) return;
+    if (!manualLeadData.first_name || !manualLeadData.last_name || !manualLeadData.email) return;
 
     const newLead: Lead = {
       id: `manual-${Date.now()}`,
-      name: manualLeadName,
-      email: manualLeadEmail,
-      phone: manualLeadPhone,
-      status: 'nouveau'
+      name: `${manualLeadData.first_name} ${manualLeadData.last_name}`,
+      email: manualLeadData.email,
+      phone: manualLeadData.phone,
+      status: manualLeadData.status || 'nouveau'
     };
 
     setLeads([...leads, newLead]);
-    setManualLeadName('');
-    setManualLeadEmail('');
-    setManualLeadPhone('');
+    setManualLeadData({
+      first_name: '',
+      last_name: '',
+      phone: '',
+      email: '',
+      status: '',
+      city: '',
+      department: '',
+      birth_year: '',
+      imposition: '',
+      residence_status: '',
+      postal_code: ''
+    });
+    setManualLeadStep(1);
   };
 
   const handleRemoveLead = (leadId: string) => {
@@ -320,41 +342,177 @@ export default function AddListModal({ onClose, onSave, list, availableUsers }: 
                 </div>
 
                 <div className="bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
-                  <h3 className="text-sm font-light text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                    <Plus className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                    Ajouter manuellement
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <input
-                      type="text"
-                      value={manualLeadName}
-                      onChange={(e) => setManualLeadName(e.target.value)}
-                      placeholder="Nom complet"
-                      className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-                    />
-                    <input
-                      type="email"
-                      value={manualLeadEmail}
-                      onChange={(e) => setManualLeadEmail(e.target.value)}
-                      placeholder="Email"
-                      className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-                    />
-                    <input
-                      type="tel"
-                      value={manualLeadPhone}
-                      onChange={(e) => setManualLeadPhone(e.target.value)}
-                      placeholder="Téléphone"
-                      className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
-                    />
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-sm font-light text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                      <Plus className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                      Ajouter manuellement
+                    </h3>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 font-light">
+                      Étape {manualLeadStep} / 4
+                    </span>
                   </div>
-                  <button
-                    type="button"
-                    onClick={handleAddManualLead}
-                    className="w-full md:w-auto mt-3 px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl text-sm font-light hover:from-blue-600 hover:to-blue-700 flex items-center justify-center gap-2 shadow-md transition-all"
-                  >
-                    <Plus className="w-4 h-4" />
-                    Ajouter
-                  </button>
+
+                  <div className="space-y-3">
+                    {manualLeadStep === 1 && (
+                      <>
+                        <div>
+                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Prénom</label>
+                          <input
+                            type="text"
+                            value={manualLeadData.first_name}
+                            onChange={(e) => setManualLeadData({ ...manualLeadData, first_name: e.target.value })}
+                            placeholder="Prénom"
+                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Nom</label>
+                          <input
+                            type="text"
+                            value={manualLeadData.last_name}
+                            onChange={(e) => setManualLeadData({ ...manualLeadData, last_name: e.target.value })}
+                            placeholder="Nom"
+                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Téléphone</label>
+                          <input
+                            type="tel"
+                            value={manualLeadData.phone}
+                            onChange={(e) => setManualLeadData({ ...manualLeadData, phone: e.target.value })}
+                            placeholder="Téléphone"
+                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                          />
+                        </div>
+                      </>
+                    )}
+
+                    {manualLeadStep === 2 && (
+                      <>
+                        <div>
+                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                          <input
+                            type="email"
+                            value={manualLeadData.email}
+                            onChange={(e) => setManualLeadData({ ...manualLeadData, email: e.target.value })}
+                            placeholder="Email"
+                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Statut</label>
+                          <input
+                            type="text"
+                            value={manualLeadData.status}
+                            onChange={(e) => setManualLeadData({ ...manualLeadData, status: e.target.value })}
+                            placeholder="Statut"
+                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Ville</label>
+                          <input
+                            type="text"
+                            value={manualLeadData.city}
+                            onChange={(e) => setManualLeadData({ ...manualLeadData, city: e.target.value })}
+                            placeholder="Ville"
+                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                          />
+                        </div>
+                      </>
+                    )}
+
+                    {manualLeadStep === 3 && (
+                      <>
+                        <div>
+                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Département</label>
+                          <input
+                            type="text"
+                            value={manualLeadData.department}
+                            onChange={(e) => setManualLeadData({ ...manualLeadData, department: e.target.value })}
+                            placeholder="Département"
+                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Année</label>
+                          <input
+                            type="text"
+                            value={manualLeadData.birth_year}
+                            onChange={(e) => setManualLeadData({ ...manualLeadData, birth_year: e.target.value })}
+                            placeholder="Année"
+                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Imposition</label>
+                          <input
+                            type="text"
+                            value={manualLeadData.imposition}
+                            onChange={(e) => setManualLeadData({ ...manualLeadData, imposition: e.target.value })}
+                            placeholder="Imposition"
+                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                          />
+                        </div>
+                      </>
+                    )}
+
+                    {manualLeadStep === 4 && (
+                      <>
+                        <div>
+                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Résidence</label>
+                          <input
+                            type="text"
+                            value={manualLeadData.residence_status}
+                            onChange={(e) => setManualLeadData({ ...manualLeadData, residence_status: e.target.value })}
+                            placeholder="Résidence"
+                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-1">Code postal</label>
+                          <input
+                            type="text"
+                            value={manualLeadData.postal_code}
+                            onChange={(e) => setManualLeadData({ ...manualLeadData, postal_code: e.target.value })}
+                            placeholder="Code postal"
+                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 font-light"
+                          />
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between mt-4 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setManualLeadStep(Math.max(1, manualLeadStep - 1))}
+                      disabled={manualLeadStep === 1}
+                      className="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl text-sm font-light transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Précédent
+                    </button>
+
+                    {manualLeadStep < 4 ? (
+                      <button
+                        type="button"
+                        onClick={() => setManualLeadStep(Math.min(4, manualLeadStep + 1))}
+                        className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl text-sm font-light hover:from-blue-600 hover:to-blue-700 transition-all"
+                      >
+                        Suivant
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleAddManualLead}
+                        className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl text-sm font-light hover:from-green-600 hover:to-green-700 flex items-center gap-2 shadow-md transition-all"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Ajouter
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <div>
